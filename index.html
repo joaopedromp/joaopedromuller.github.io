@@ -1,0 +1,1498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Kaitlyn & Joao · April 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:     #060a17;
+    --card:     rgba(255,255,255,0.032);
+    --border:   rgba(255,255,255,0.075);
+    --gold:     #d4a843;
+    --rose:     #c9607a;
+    --lavender: #8878b8;
+    --sky:      #4db8e8;
+    --white:    #ede8e0;
+    --muted:    rgba(237,232,224,0.42);
+    --faint:    rgba(237,232,224,0.1);
+  }
+
+  *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--navy);
+    color: var(--white);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.018;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── PASSWORD GATE ─── */
+  #pw-gate {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0;
+    padding: 24px;
+    transition: opacity .35s ease;
+  }
+  #pw-gate.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  .pw-wrap {
+    width: min(340px, 100%);
+    text-align: center;
+  }
+  .pw-icon {
+    font-size: 32px;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .pw-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .pw-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .28em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .pw-input-wrap {
+    position: relative;
+    margin-bottom: 12px;
+  }
+  #pw-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px 18px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 15px;
+    letter-spacing: .1em;
+    text-align: center;
+    outline: none;
+    transition: border-color .2s;
+    -webkit-appearance: none;
+  }
+  #pw-input:focus {
+    border-color: rgba(201,96,122,.45);
+  }
+  #pw-input.error {
+    border-color: rgba(201,96,122,.8);
+    animation: shake .35s ease;
+  }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    20%      { transform: translateX(-8px); }
+    40%      { transform: translateX(8px); }
+    60%      { transform: translateX(-5px); }
+    80%      { transform: translateX(5px); }
+  }
+  #pw-error {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--rose);
+    opacity: 0;
+    margin-bottom: 16px;
+    transition: opacity .2s;
+    height: 14px;
+  }
+  #pw-error.show { opacity: 1; }
+  #pw-btn {
+    width: 100%;
+    background: linear-gradient(135deg, rgba(201,96,122,.18), rgba(136,120,184,.18));
+    border: 1px solid rgba(201,96,122,.3);
+    border-radius: 8px;
+    padding: 15px;
+    color: var(--white);
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all .2s;
+    touch-action: manipulation;
+    min-height: 48px;
+  }
+  #pw-btn:hover, #pw-btn:active {
+    background: linear-gradient(135deg, rgba(201,96,122,.28), rgba(136,120,184,.28));
+    border-color: rgba(201,96,122,.55);
+  }
+  .pw-rule {
+    width: 30px; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--lavender), transparent);
+    margin: 28px auto 0;
+  }
+
+  /* ─── MAIN CONTENT (hidden until auth) ─── */
+  #main-content {
+    display: none;
+  }
+  #main-content.visible {
+    display: block;
+  }
+
+  /* ─── REDACTED SPANS ─── */
+  .redacted {
+    display: inline-block;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    color: transparent;
+    user-select: none;
+    letter-spacing: 0;
+    min-width: 80px;
+    height: 1em;
+    vertical-align: middle;
+  }
+
+  /* ─── STARFIELD ─── */
+  #sf { position:fixed; inset:0; pointer-events:none; z-index:0; }
+  .s {
+    position:absolute; border-radius:50%; background:#fff;
+    animation: tw var(--d) ease-in-out infinite var(--dl);
+  }
+  @keyframes tw {
+    0%,100% { opacity:var(--lo); }
+    50%      { opacity:var(--hi); }
+  }
+
+  /* ─── AURORA ─── */
+  .aurora {
+    position:fixed; top:0; left:0; right:0; height:55vh;
+    background: radial-gradient(ellipse 130% 65% at 50% -8%,
+      rgba(77,184,232,0.055) 0%,
+      rgba(136,120,184,0.04) 50%,
+      transparent 100%);
+    pointer-events:none; z-index:0;
+    animation: aur 12s ease-in-out infinite alternate;
+  }
+  @keyframes aur {
+    from { opacity:.65; transform: translateX(-1%); }
+    to   { opacity:1;   transform: translateX(1%); }
+  }
+
+  /* ─── PAGE ─── */
+  .page {
+    position:relative; z-index:1;
+    max-width:760px; margin:0 auto;
+    padding: 80px 24px 140px;
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+    padding-bottom: max(140px, calc(80px + env(safe-area-inset-bottom)));
+  }
+
+  /* ─── HEADER ─── */
+  header { text-align:center; margin-bottom:60px; }
+  .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size:10px; letter-spacing:.32em; text-transform:uppercase;
+    color:var(--lavender); margin-bottom:22px;
+    opacity: .8;
+  }
+  header h1 {
+    font-family:'Cormorant Garamond', serif;
+    font-size: clamp(52px, 10vw, 92px);
+    font-weight:300; line-height:1.02; color:var(--white);
+  }
+  header h1 em { color:var(--rose); font-style:italic; }
+  .header-rule {
+    width:40px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--lavender), transparent);
+    margin:26px auto 0;
+  }
+
+  /* ─── COUNTDOWN ─── */
+  .countdown {
+    display:flex; justify-content:center; gap:0;
+    flex-wrap:nowrap; margin-bottom:80px;
+    width: 100%;
+  }
+  .cd-block {
+    background: rgba(255,255,255,0.025);
+    border:1px solid var(--border);
+    padding:16px 0 13px;
+    text-align:center;
+    flex: 1;
+    min-width: 0;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .cd-block:first-child { border-radius:8px 0 0 8px; }
+  .cd-block:last-child  { border-radius:0 8px 8px 0; }
+  .cd-block + .cd-block { border-left: none; }
+  .cd-num {
+    font-family:'DM Mono', monospace;
+    font-size: clamp(28px, 7vw, 40px);
+    line-height:1; font-weight:300;
+    color:var(--gold); display:block;
+    letter-spacing:-.02em;
+  }
+  .cd-label {
+    font-family:'DM Mono', monospace;
+    font-size: clamp(6px, 1.8vw, 8px);
+    letter-spacing:.2em; text-transform:uppercase;
+    color:var(--muted); margin-top:7px; display:block;
+  }
+  .cd-sep {
+    align-self:stretch;
+    font-size: clamp(16px, 4vw, 22px);
+    color:var(--faint);
+    font-weight:200; z-index:1;
+    background: rgba(255,255,255,0.025);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 0 clamp(2px, 1vw, 6px);
+    display: flex; align-items: center; justify-content: center;
+    padding-top: 0; padding-bottom: 14px;
+    flex-shrink: 0;
+  }
+
+  /* ─── SECTION LABEL ─── */
+  .sec-label {
+    font-family:'DM Mono', monospace;
+    font-size:9px; letter-spacing:.4em; text-transform:uppercase;
+    color:var(--lavender); margin-bottom:32px;
+    display:flex; align-items:center; gap:16px;
+    opacity:.75;
+  }
+  .sec-label::after {
+    content:''; flex:1; height:1px;
+    background:linear-gradient(90deg, rgba(136,120,184,.25), transparent);
+  }
+
+  /* ─── TIMELINE ─── */
+  .journey { position:relative; margin-bottom:72px; }
+  .j-line {
+    position:absolute; left:27px; top:56px; bottom:56px; width:1px;
+    background:linear-gradient(180deg, var(--sky), var(--lavender), var(--rose));
+    opacity:.18;
+  }
+
+  .segment { display:flex; gap:22px; margin-bottom:22px; align-items:flex-start; }
+
+  .seg-icon {
+    width:54px; height:54px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-size:21px; flex-shrink:0; position:relative; z-index:1;
+    border:1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+  }
+  .seg-icon.i-flight  { border-color:rgba(77,184,232,.3); box-shadow:0 0 18px rgba(77,184,232,.08); }
+  .seg-icon.i-klav    { border-color:rgba(136,120,184,.3); box-shadow:0 0 18px rgba(136,120,184,.08); }
+  .seg-icon.i-gold    { border-color:rgba(212,168,67,.3); box-shadow:0 0 18px rgba(212,168,67,.08); }
+  .seg-icon.i-rose    { border-color:rgba(201,96,122,.35); box-shadow:0 0 18px rgba(201,96,122,.1); }
+
+  .seg-body { flex:1; padding-top:4px; }
+
+  .seg-head {
+    display:flex; align-items:flex-start; justify-content:space-between;
+    gap:12px; margin-bottom:4px;
+  }
+  .seg-title {
+    font-family:'Cormorant Garamond', serif;
+    font-size:22px; font-weight:400; color:var(--white);
+    line-height:1.1;
+  }
+  .seg-meta {
+    font-family:'DM Mono', monospace;
+    font-size:9.5px; color:var(--muted); letter-spacing:.06em;
+    margin-bottom:12px; margin-top:2px;
+  }
+
+  .ticket-btn {
+    font-family:'DM Mono', monospace;
+    font-size:8.5px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--lavender); background:none; border:1px solid rgba(136,120,184,.25);
+    border-radius:3px; padding:7px 12px; cursor:pointer;
+    transition:all .2s; white-space:nowrap; flex-shrink:0;
+    margin-top:3px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 36px; display: flex; align-items: center;
+  }
+  .ticket-btn:hover, .ticket-btn:active { color:var(--white); border-color:rgba(136,120,184,.6); background:rgba(136,120,184,.07); }
+  .ticket-btn.gold  { color:var(--gold); border-color:rgba(212,168,67,.25); }
+  .ticket-btn.gold:hover, .ticket-btn.gold:active { border-color:rgba(212,168,67,.6); background:rgba(212,168,67,.07); }
+  .ticket-btn.sky   { color:var(--sky); border-color:rgba(77,184,232,.25); }
+  .ticket-btn.sky:hover, .ticket-btn.sky:active  { border-color:rgba(77,184,232,.6); background:rgba(77,184,232,.07); }
+
+  .seg-visual {
+    background: rgba(255,255,255,0.022);
+    border:1px solid var(--border);
+    border-radius:8px; padding:16px 18px;
+    position:relative; overflow:hidden;
+  }
+  .route-row { display:flex; align-items:center; gap:12px; }
+  .route-end { display:flex; flex-direction:column; gap:3px; }
+  .route-code {
+    font-family:'Cormorant Garamond', serif;
+    font-size:26px; font-weight:600; line-height:1;
+  }
+  .route-city {
+    font-family:'DM Mono', monospace;
+    font-size:8px; color:var(--muted); letter-spacing:.12em; text-transform:uppercase;
+  }
+  .route-track {
+    flex:1; position:relative; height:1px;
+    background:var(--faint); border-radius:1px; overflow:visible;
+  }
+  .route-dot {
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:6px; height:6px; border-radius:50%;
+    animation:travel 8s cubic-bezier(.4,0,.6,1) infinite;
+  }
+  @keyframes travel {
+    0%   { left:0%;               opacity:0; }
+    6%   { opacity:1; }
+    94%  { opacity:1; }
+    100% { left:calc(100% - 6px); opacity:0; }
+  }
+  .seg-times {
+    display:flex; justify-content:space-between;
+    margin-top:12px;
+    font-family:'DM Mono', monospace;
+    font-size:9px; color:var(--muted);
+    letter-spacing:.04em;
+  }
+  .seg-times b { color:var(--white); font-weight:400; }
+
+  .f-arc {
+    position:absolute; top:0; left:0; right:0; height:24px;
+    pointer-events:none;
+  }
+
+  /* ─── REUNION CARD ─── */
+  .reunion {
+    text-align:center;
+    background:radial-gradient(ellipse 80% 60% at 50% 50%, rgba(201,96,122,.08), transparent);
+    border:1px solid rgba(201,96,122,.15);
+    border-radius:16px; padding:52px 32px;
+    position:relative; overflow:hidden;
+  }
+  .reunion::after {
+    content:'';
+    position:absolute; inset:0;
+    background:linear-gradient(135deg, rgba(201,96,122,.03) 0%, transparent 50%, rgba(136,120,184,.03) 100%);
+    pointer-events:none;
+  }
+  .heart {
+    font-size:42px; display:inline-block;
+    animation:hb 1.6s ease-in-out infinite;
+  }
+  @keyframes hb {
+    0%,100% { transform:scale(1); }
+    15%     { transform:scale(1.18); }
+    30%     { transform:scale(1); }
+    45%     { transform:scale(1.1); }
+    60%     { transform:scale(1); }
+  }
+  .reunion h2 {
+    font-family:'Cormorant Garamond', serif;
+    font-size:38px; font-weight:300; color:var(--rose);
+    margin:16px 0 6px;
+  }
+  .reunion .when {
+    font-family:'DM Mono', monospace;
+    font-size:11px; color:var(--gold); letter-spacing:.1em; margin-top:18px;
+  }
+  .reunion .coxinha {
+    font-size:11px; color:var(--muted); font-style:italic; margin-top:10px;
+  }
+
+  /* ─── BOARDING PASS MODAL ─── */
+  .modal-overlay {
+    position:fixed; inset:0; z-index:100;
+    background:rgba(3,6,16,.85);
+    -webkit-backdrop-filter:blur(14px);
+    backdrop-filter:blur(14px);
+    display:flex; align-items:flex-start; justify-content:center;
+    opacity:0; pointer-events:none;
+    transition:opacity .22s;
+    padding: max(56px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-overlay.open { opacity:1; pointer-events:auto; }
+
+  .boarding-pass {
+    width: min(420px, 100%);
+    position: relative;
+    margin: auto;
+    transform: translateY(16px) scale(.97);
+    transition: transform .3s cubic-bezier(.34,1.4,.64,1), opacity .22s;
+    opacity: 0;
+    padding-top: 44px;
+  }
+  .modal-overlay.open .boarding-pass { transform: translateY(0) scale(1); opacity: 1; }
+
+  .bp-close {
+    position: absolute; top: 0; right: 0;
+    background: none; border: none; cursor: pointer;
+    color: var(--muted); font-size: 12px;
+    font-family: 'DM Mono', monospace; letter-spacing: .15em;
+    text-transform: uppercase; transition: color .15s;
+    display: flex; align-items: center; gap: 6px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    padding: 8px 0;
+    min-height: 44px;
+  }
+  .bp-close:hover, .bp-close:active { color: var(--white); }
+  .bp-close::before { content: '✕'; font-size: 14px; }
+
+  .bp-body {
+    background: #0d1325;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.04) inset;
+  }
+
+  .bp-top {
+    padding: 26px 26px 22px;
+    position: relative;
+  }
+  .bp-carrier {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: .35em; text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .bp-carrier-name { opacity: .45; }
+  .bp-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .25em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 3px;
+    border: 1px solid; opacity: .6;
+  }
+
+  .bp-route {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 20px;
+  }
+  .bp-city {
+    display: flex; flex-direction: column; gap: 5px;
+  }
+  .bp-city.right { text-align: right; }
+  .bp-iata {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 52px; font-weight: 600; line-height: 1;
+    letter-spacing: -.02em;
+  }
+  .bp-cityname {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .18em; text-transform: uppercase;
+    opacity: .4;
+  }
+  .bp-track {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 5px; padding: 0 14px; padding-bottom: 14px;
+  }
+  .bp-track-icon { font-size: 18px; opacity: .7; }
+  .bp-track-line {
+    width: 100%; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  .bp-times {
+    display: flex; justify-content: space-between;
+    padding: 12px 14px;
+    background: rgba(255,255,255,.025);
+    border-radius: 8px;
+    margin-bottom: 4px;
+  }
+  .bp-time-block { display: flex; flex-direction: column; gap: 4px; }
+  .bp-time-block.right { text-align: right; }
+  .bp-time-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .25em; text-transform: uppercase;
+    opacity: .35;
+  }
+  .bp-time-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 15px; font-weight: 400;
+    letter-spacing: .03em;
+  }
+  .bp-time-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; opacity: .4; letter-spacing: .05em; margin-top: 1px;
+  }
+
+  .bp-perf {
+    display: flex; align-items: center;
+    position: relative; margin: 0 -1px;
+  }
+  .bp-perf-notch {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #060a17;
+    border: 1px solid rgba(255,255,255,.09);
+    flex-shrink: 0;
+  }
+  .bp-perf-notch.left  { margin-left: -10px; }
+  .bp-perf-notch.right { margin-right: -10px; }
+  .bp-perf-line {
+    flex: 1; height: 1px;
+    border-top: 1.5px dashed rgba(255,255,255,.1);
+  }
+
+  .bp-stub {
+    padding: 20px 26px 24px;
+  }
+  .bp-fields {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 14px 20px; margin-bottom: 20px;
+  }
+  .bp-field { display: flex; flex-direction: column; gap: 5px; }
+  .bp-field.full { grid-column: 1 / -1; }
+  .bp-field-lbl {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .28em; text-transform: uppercase;
+    opacity: .35;
+  }
+  .bp-field-val {
+    font-family: 'DM Mono', monospace;
+    font-size: 16px; font-weight: 400;
+    letter-spacing: .04em;
+    color: var(--white);
+  }
+  .bp-field-val.booking {
+    font-size: 20px; letter-spacing: .12em;
+  }
+
+  .bp-link {
+    display: flex; align-items: center; justify-content: center; gap: 9px;
+    width: 100%;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+    font-weight: 400;
+    text-decoration: none;
+    border-radius: 7px;
+    padding: 15px 20px;
+    transition: opacity .2s, transform .15s;
+    color: rgba(6,10,23,.9);
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 48px;
+  }
+  .bp-link:hover, .bp-link:active { opacity: .85; transform: translateY(-1px); }
+  .bp-link svg { width: 11px; height: 11px; flex-shrink: 0; }
+  .bp-link.sky  { background: linear-gradient(135deg, #4db8e8, #68cbf7); }
+  .bp-link.lav  { background: linear-gradient(135deg, #8878b8, #a491d6); }
+  .bp-link.gold { background: linear-gradient(135deg, #d4a843, #e2bb56); }
+  .bp-link.disabled {
+    opacity: .35;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  .bp-accent {
+    height: 3px; width: 100%;
+    display: block;
+  }
+
+  /* ─── ITINERARY BUTTON ─── */
+  .itin-btn {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+    color: var(--gold); background: none;
+    border: 1px solid rgba(212,168,67,.28);
+    border-radius: 6px; padding: 12px 22px;
+    cursor: pointer; margin-top: 26px;
+    transition: all .2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    min-height: 44px;
+  }
+  .itin-btn:hover, .itin-btn:active {
+    color: var(--white); border-color: rgba(212,168,67,.6);
+    background: rgba(212,168,67,.07);
+  }
+
+  /* ─── ITINERARY MODAL ─── */
+  .itin-modal {
+    width: min(560px, 100%);
+    position: relative;
+    margin: auto;
+    transform: translateY(16px) scale(.97);
+    transition: transform .3s cubic-bezier(.34,1.4,.64,1), opacity .22s;
+    opacity: 0;
+    padding-top: 44px;
+  }
+  .modal-overlay.open .itin-modal { transform: translateY(0) scale(1); opacity: 1; }
+
+  .itin-body {
+    background: #0d1325;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(0,0,0,.75), 0 0 0 1px rgba(255,255,255,.04) inset;
+  }
+  .itin-header {
+    padding: 26px 26px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .itin-header-top {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 6px;
+  }
+  .itin-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .35em; text-transform: uppercase;
+    color: var(--gold); opacity: .7;
+  }
+  .itin-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; color: var(--white);
+  }
+
+  .itin-tabs {
+    display: flex; gap: 0;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .itin-tab {
+    flex: 1; padding: 13px 10px;
+    font-family: 'DM Mono', monospace;
+    font-size: 8px; letter-spacing: .22em; text-transform: uppercase;
+    background: none; border: none; color: var(--muted);
+    cursor: pointer; transition: all .2s;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    position: relative;
+  }
+  .itin-tab:hover { color: var(--white); }
+  .itin-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .itin-tab-date {
+    display: block; font-size: 9px; margin-bottom: 3px;
+    font-weight: 400;
+  }
+  .itin-tab-label { display: block; font-size: 7px; opacity: .65; }
+
+  .itin-panels { padding: 24px 24px 28px; }
+  .itin-panel { display: none; }
+  .itin-panel.active { display: block; }
+
+  .itin-timeline { position: relative; }
+  .itin-t-line {
+    position: absolute; left: 20px; top: 10px; bottom: 10px; width: 1px;
+    background: linear-gradient(180deg, var(--gold), var(--rose), var(--lavender));
+    opacity: .15;
+  }
+  .itin-event { display: flex; gap: 18px; margin-bottom: 20px; align-items: flex-start; }
+  .itin-event:last-child { margin-bottom: 0; }
+
+  .itin-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; flex-shrink: 0; position: relative; z-index: 1;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,.03);
+  }
+
+  .itin-event-body { flex: 1; padding-top: 4px; }
+  .itin-event-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .itin-event-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px; font-weight: 400; color: var(--white); line-height: 1.1;
+  }
+  .itin-event-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: var(--gold); letter-spacing: .06em;
+    white-space: nowrap; margin-top: 3px; flex-shrink: 0;
+  }
+  .itin-event-desc {
+    font-size: 12px; color: var(--muted); margin-top: 4px; line-height: 1.5;
+  }
+
+  .itin-tbd {
+    text-align: center; padding: 36px 20px;
+    border: 1px dashed rgba(255,255,255,.08);
+    border-radius: 10px;
+  }
+  .itin-tbd-emoji { font-size: 30px; display: block; margin-bottom: 10px; }
+  .itin-tbd-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; color: var(--muted); font-weight: 300;
+  }
+  .itin-tbd-sub {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; color: var(--faint); letter-spacing: .15em;
+    text-transform: uppercase; margin-top: 8px;
+  }
+
+  /* ─── PARTICLES ─── */
+  .particle {
+    position:fixed; pointer-events:none; z-index:0;
+    border-radius:50%;
+    animation:fu var(--fd) ease-in infinite var(--fdl);
+    opacity:0;
+  }
+  @keyframes fu {
+    0%   { opacity:0; transform:translateY(0); }
+    8%   { opacity:.35; }
+    92%  { opacity:.1; }
+    100% { opacity:0; transform:translateY(-110vh); }
+  }
+
+  @media (max-width: 480px) {
+    .page { padding-top: 56px; }
+    header { margin-bottom: 44px; }
+    .countdown { margin-bottom: 56px; }
+    .seg-head { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ticket-btn { margin-top: 0; align-self: flex-start; }
+    .segment { gap: 14px; margin-bottom: 18px; }
+    .seg-icon { width: 44px; height: 44px; font-size: 18px; flex-shrink: 0; }
+    .j-line { left: 22px; }
+    .route-code { font-size: 22px; }
+    .seg-times { font-size: 8.5px; }
+    .bp-iata { font-size: 40px; }
+    .bp-top { padding: 20px 18px 18px; }
+    .bp-stub { padding: 16px 18px 20px; }
+    .reunion { padding: 40px 20px; }
+    .reunion h2 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     PASSWORD GATE
+     Change the password in the JS below.
+══════════════════════════════════════ -->
+<div id="pw-gate">
+  <div class="pw-wrap">
+    <span class="pw-icon">🔒</span>
+    <div class="pw-title">Private Page</div>
+    <div class="pw-sub">Enter password to continue</div>
+    <div class="pw-input-wrap">
+      <input
+        id="pw-input"
+        type="password"
+        placeholder="••••••••"
+        autocomplete="off"
+        autocorrect="off"
+        autocapitalize="off"
+        spellcheck="false"
+      />
+    </div>
+    <div id="pw-error">Incorrect password</div>
+    <button id="pw-btn">Enter</button>
+    <div class="pw-rule"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     MAIN CONTENT (hidden until auth)
+══════════════════════════════════════ -->
+<div id="main-content">
+
+<div id="sf"></div>
+<div class="aurora"></div>
+
+<div class="page">
+
+  <header>
+    <p class="eyebrow">April 2, 2026 · London, Ontario</p>
+    <h1><em>Kaitlyn</em><br>&amp; Joao.</h1>
+    <div class="header-rule"></div>
+  </header>
+
+  <div class="countdown">
+    <div class="cd-block"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Minutes</span></div>
+    <div class="cd-sep">:</div>
+    <div class="cd-block"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Seconds</span></div>
+  </div>
+
+  <div class="sec-label">The Journey</div>
+
+  <div class="journey">
+    <div class="j-line"></div>
+
+    <!-- KAITLYN FLIGHT -->
+    <div class="segment">
+      <div class="seg-icon i-flight">✈️</div>
+      <div class="seg-body">
+        <div class="seg-head">
+          <div>
+            <div class="seg-title">Kaitlyn's Flight</div>
+            <div class="seg-meta">F8 664 · Apr 1 → Apr 2 · Flair Airlines</div>
+          </div>
+          <button class="ticket-btn sky" onclick="openModal('flight')">Boarding Pass ↗</button>
+        </div>
+        <div class="seg-visual">
+          <svg class="f-arc" viewBox="0 0 400 24" preserveAspectRatio="none">
+            <path d="M0 22 Q200 2 400 22" fill="none" stroke="rgba(77,184,232,0.1)" stroke-width="1.5" stroke-dasharray="4 3"/>
+          </svg>
+          <div class="route-row">
+            <div class="route-end">
+              <span class="route-code" style="color:var(--sky)">YXX</span>
+              <span class="route-city">Abbotsford</span>
+            </div>
+            <div class="route-track">
+              <div class="route-dot" style="background:var(--sky);box-shadow:0 0 6px var(--sky)"></div>
+            </div>
+            <div class="route-end" style="text-align:right">
+              <span class="route-code" style="color:var(--sky)">YYZ</span>
+              <span class="route-city">Toronto</span>
+            </div>
+          </div>
+          <div class="seg-times">
+            <span>Dep <b>11:05 PM</b> Apr 1</span>
+            <span>Arr <b>6:40 AM</b> Apr 2</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- KAITLYN TRAIN -->
+    <div class="segment">
+      <div class="seg-icon i-klav">🚆</div>
+      <div class="seg-body">
+        <div class="seg-head">
+          <div>
+            <div class="seg-title">Kaitlyn's Train</div>
+            <div class="seg-meta">VIA Rail · Toronto → London</div>
+          </div>
+          <button class="ticket-btn" onclick="openModal('ktrain')">View Ticket ↗</button>
+        </div>
+        <div class="seg-visual">
+          <div class="route-row">
+            <div class="route-end">
+              <span class="route-code" style="color:var(--lavender)">YYZ</span>
+              <span class="route-city">Toronto</span>
+            </div>
+            <div class="route-track">
+              <div class="route-dot" style="background:var(--lavender);box-shadow:0 0 6px var(--lavender)"></div>
+            </div>
+            <div class="route-end" style="text-align:right">
+              <span class="route-code" style="color:var(--lavender)">YXU</span>
+              <span class="route-city">London</span>
+            </div>
+          </div>
+          <div class="seg-times">
+            <span>Dep <b>~11:00 AM</b></span>
+            <span>Arr <b>~1:00 PM</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOAO TRAIN -->
+    <div class="segment">
+      <div class="seg-icon i-gold">🚂</div>
+      <div class="seg-body">
+        <div class="seg-head">
+          <div>
+            <div class="seg-title">Joao's Train</div>
+            <div class="seg-meta">VIA Rail · Windsor → London</div>
+          </div>
+          <button class="ticket-btn gold" onclick="openModal('jtrain')">View Ticket ↗</button>
+        </div>
+        <div class="seg-visual">
+          <div class="route-row">
+            <div class="route-end">
+              <span class="route-code" style="color:var(--gold)">YQG</span>
+              <span class="route-city">Windsor</span>
+            </div>
+            <div class="route-track">
+              <div class="route-dot" style="background:var(--gold);box-shadow:0 0 6px var(--gold)"></div>
+            </div>
+            <div class="route-end" style="text-align:right">
+              <span class="route-code" style="color:var(--gold)">YXU</span>
+              <span class="route-city">London</span>
+            </div>
+          </div>
+          <div class="seg-times">
+            <span>Dep <b>8:43 AM</b></span>
+            <span>Arr <b>10:39 AM</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BUNNIES TRAIN -->
+    <div class="segment">
+      <div class="seg-icon i-rose" style="font-size:14px;letter-spacing:-2px;padding-left:2px">🐰🐰</div>
+      <div class="seg-body">
+        <div class="seg-head">
+          <div>
+            <div class="seg-title">Bunnies' Train</div>
+            <div class="seg-meta">VIA Rail · London → Windsor · Together 🤍</div>
+          </div>
+        </div>
+        <div class="seg-visual">
+          <div class="route-row">
+            <div class="route-end">
+              <span class="route-code" style="color:var(--rose)">YXU</span>
+              <span class="route-city">London</span>
+            </div>
+            <div class="route-track">
+              <div class="route-dot" style="background:var(--rose);box-shadow:0 0 6px var(--rose)"></div>
+            </div>
+            <div class="route-end" style="text-align:right">
+              <span class="route-code" style="color:var(--rose)">YQG</span>
+              <span class="route-city">Windsor</span>
+            </div>
+          </div>
+          <div class="seg-times">
+            <span>Dep <b>1:45 PM</b></span>
+            <span>Arr <b>3:45 PM</b></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="sec-label">The Moment</div>
+  <div class="reunion">
+    <div class="heart">💕</div>
+    <h2>London, Ontario</h2>
+    <p class="when">April 2, 2026 · ~1:00 PM</p>
+    <p class="coxinha">🍗 coxinhas in hand, obviously.</p>
+    <button class="itin-btn" onclick="openModal('itinerary')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      Trip Itinerary ↗
+    </button>
+  </div>
+
+</div>
+
+<!-- ── BOARDING PASS: Kaitlyn's Flight ── -->
+<div class="modal-overlay" id="modal-flight" onclick="closeOnBg(event,'modal-flight')">
+  <div class="boarding-pass">
+    <button class="bp-close" onclick="closeModal('modal-flight')">Close</button>
+    <div class="bp-body">
+      <span class="bp-accent" style="background:linear-gradient(90deg,#4db8e8,#60c8f4,rgba(77,184,232,0.2))"></span>
+      <div class="bp-top">
+        <div class="bp-carrier">
+          <span class="bp-carrier-name">Flair Airlines</span>
+          <span class="bp-type" style="color:var(--sky);border-color:rgba(77,184,232,.3)">F8 664</span>
+        </div>
+        <div class="bp-route">
+          <div class="bp-city">
+            <span class="bp-iata" style="color:var(--sky)">YXX</span>
+            <span class="bp-cityname">Abbotsford</span>
+          </div>
+          <div class="bp-track">
+            <span class="bp-track-icon">✈</span>
+            <div class="bp-track-line"></div>
+          </div>
+          <div class="bp-city right">
+            <span class="bp-iata" style="color:var(--sky)">YYZ</span>
+            <span class="bp-cityname">Toronto</span>
+          </div>
+        </div>
+        <div class="bp-times">
+          <div class="bp-time-block">
+            <span class="bp-time-lbl">Departs</span>
+            <span class="bp-time-val">11:05 PM</span>
+            <span class="bp-time-date">Apr 1, 2026</span>
+          </div>
+          <div class="bp-time-block right">
+            <span class="bp-time-lbl">Arrives</span>
+            <span class="bp-time-val">6:40 AM</span>
+            <span class="bp-time-date">Apr 2, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="bp-perf">
+        <div class="bp-perf-notch left"></div>
+        <div class="bp-perf-line"></div>
+        <div class="bp-perf-notch right"></div>
+      </div>
+      <div class="bp-stub">
+        <div class="bp-fields">
+          <div class="bp-field">
+            <span class="bp-field-lbl">Passenger</span>
+            <span class="bp-field-val" data-secret="flight-passenger">••••••</span>
+          </div>
+          <div class="bp-field">
+            <span class="bp-field-lbl">Reservation</span>
+            <span class="bp-field-val booking" style="color:var(--sky)" data-secret="flight-code">••••••</span>
+          </div>
+        </div>
+        <a class="bp-link sky disabled" id="flight-link" href="#" target="_blank" rel="noopener" data-secret-href="flight-href">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          Manage Booking
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BOARDING PASS: Kaitlyn's Train ── -->
+<div class="modal-overlay" id="modal-ktrain" onclick="closeOnBg(event,'modal-ktrain')">
+  <div class="boarding-pass">
+    <button class="bp-close" onclick="closeModal('modal-ktrain')">Close</button>
+    <div class="bp-body">
+      <span class="bp-accent" style="background:linear-gradient(90deg,#8878b8,#a491d6,rgba(136,120,184,0.2))"></span>
+      <div class="bp-top">
+        <div class="bp-carrier">
+          <span class="bp-carrier-name">VIA Rail Canada</span>
+          <span class="bp-type" style="color:var(--lavender);border-color:rgba(136,120,184,.3)">Train</span>
+        </div>
+        <div class="bp-route">
+          <div class="bp-city">
+            <span class="bp-iata" style="color:var(--lavender)">YYZ</span>
+            <span class="bp-cityname">Toronto</span>
+          </div>
+          <div class="bp-track">
+            <span class="bp-track-icon">🚆</span>
+            <div class="bp-track-line"></div>
+          </div>
+          <div class="bp-city right">
+            <span class="bp-iata" style="color:var(--lavender)">YXU</span>
+            <span class="bp-cityname">London</span>
+          </div>
+        </div>
+        <div class="bp-times">
+          <div class="bp-time-block">
+            <span class="bp-time-lbl">Departs</span>
+            <span class="bp-time-val">~11:00 AM</span>
+            <span class="bp-time-date">Apr 2, 2026</span>
+          </div>
+          <div class="bp-time-block right">
+            <span class="bp-time-lbl">Arrives</span>
+            <span class="bp-time-val">~1:00 PM</span>
+            <span class="bp-time-date">Apr 2, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="bp-perf">
+        <div class="bp-perf-notch left"></div>
+        <div class="bp-perf-line"></div>
+        <div class="bp-perf-notch right"></div>
+      </div>
+      <div class="bp-stub">
+        <div class="bp-fields">
+          <div class="bp-field">
+            <span class="bp-field-lbl">Passenger</span>
+            <span class="bp-field-val" data-secret="ktrain-passenger">••••••••••</span>
+          </div>
+          <div class="bp-field">
+            <span class="bp-field-lbl">Booking</span>
+            <span class="bp-field-val booking" style="color:var(--lavender)" data-secret="ktrain-code">••••••</span>
+          </div>
+        </div>
+        <a class="bp-link lav disabled" id="ktrain-link" href="#" target="_blank" rel="noopener" data-secret-href="ktrain-href">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Booking
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── BOARDING PASS: Joao's Train ── -->
+<div class="modal-overlay" id="modal-jtrain" onclick="closeOnBg(event,'modal-jtrain')">
+  <div class="boarding-pass">
+    <button class="bp-close" onclick="closeModal('modal-jtrain')">Close</button>
+    <div class="bp-body">
+      <span class="bp-accent" style="background:linear-gradient(90deg,#d4a843,#e2bb56,rgba(212,168,67,0.2))"></span>
+      <div class="bp-top">
+        <div class="bp-carrier">
+          <span class="bp-carrier-name">VIA Rail Canada</span>
+          <span class="bp-type" style="color:var(--gold);border-color:rgba(212,168,67,.3)">Train</span>
+        </div>
+        <div class="bp-route">
+          <div class="bp-city">
+            <span class="bp-iata" style="color:var(--gold)">YQG</span>
+            <span class="bp-cityname">Windsor</span>
+          </div>
+          <div class="bp-track">
+            <span class="bp-track-icon">🚂</span>
+            <div class="bp-track-line"></div>
+          </div>
+          <div class="bp-city right">
+            <span class="bp-iata" style="color:var(--gold)">YXU</span>
+            <span class="bp-cityname">London</span>
+          </div>
+        </div>
+        <div class="bp-times">
+          <div class="bp-time-block">
+            <span class="bp-time-lbl">Departs</span>
+            <span class="bp-time-val">8:43 AM</span>
+            <span class="bp-time-date">Apr 2, 2026</span>
+          </div>
+          <div class="bp-time-block right">
+            <span class="bp-time-lbl">Arrives</span>
+            <span class="bp-time-val">10:39 AM</span>
+            <span class="bp-time-date">Apr 2, 2026</span>
+          </div>
+        </div>
+      </div>
+      <div class="bp-perf">
+        <div class="bp-perf-notch left"></div>
+        <div class="bp-perf-line"></div>
+        <div class="bp-perf-notch right"></div>
+      </div>
+      <div class="bp-stub">
+        <div class="bp-fields">
+          <div class="bp-field">
+            <span class="bp-field-lbl">Passenger</span>
+            <span class="bp-field-val" data-secret="jtrain-passenger">••••</span>
+          </div>
+          <div class="bp-field">
+            <span class="bp-field-lbl">Booking</span>
+            <span class="bp-field-val booking" style="color:var(--gold)" data-secret="jtrain-code">••••••</span>
+          </div>
+        </div>
+        <a class="bp-link gold disabled" id="jtrain-link" href="#" target="_blank" rel="noopener" data-secret-href="jtrain-href">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          View Booking
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ITINERARY MODAL ── -->
+<div class="modal-overlay" id="modal-itinerary" onclick="closeOnBg(event,'modal-itinerary')">
+  <div class="itin-modal">
+    <button class="bp-close" onclick="closeModal('modal-itinerary')">Close</button>
+    <div class="itin-body">
+      <span class="bp-accent" style="background:linear-gradient(90deg,#d4a843,#c9607a,rgba(136,120,184,0.2))"></span>
+      <div class="itin-header">
+        <div class="itin-header-top">
+          <span class="itin-eyebrow">April 2 – 4, 2026 · Windsor</span>
+        </div>
+        <div class="itin-title">Our Trip 🤍</div>
+      </div>
+
+      <div class="itin-tabs">
+        <button class="itin-tab active" onclick="switchDay(0)">
+          <span class="itin-tab-date">Apr 2</span>
+          <span class="itin-tab-label">Arrival Day</span>
+        </button>
+        <button class="itin-tab" onclick="switchDay(1)">
+          <span class="itin-tab-date">Apr 3</span>
+          <span class="itin-tab-label">Day Two</span>
+        </button>
+        <button class="itin-tab" onclick="switchDay(2)">
+          <span class="itin-tab-date">Apr 4</span>
+          <span class="itin-tab-label">Departure</span>
+        </button>
+      </div>
+
+      <div class="itin-panels">
+
+        <!-- DAY 1 -->
+        <div class="itin-panel active" id="itin-day-0">
+          <div class="itin-timeline">
+            <div class="itin-t-line"></div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">🚂</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Joao departs Windsor</div>
+                  <span class="itin-event-time">8:43 AM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">✈️</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Kaitlyn arrives Toronto</div>
+                  <span class="itin-event-time">6:40 AM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(136,120,184,.3);box-shadow:0 0 14px rgba(136,120,184,.08)">🚆</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Kaitlyn's train to London</div>
+                  <span class="itin-event-time">~11:00 AM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.12)">💕</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Reunion in London</div>
+                  <span class="itin-event-time">~1:00 PM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">🚂</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Train home together</div>
+                  <span class="itin-event-time">1:45 PM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">🏠</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Arrive home · get dressed</div>
+                  <span class="itin-event-time">~3:45 PM</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(212,168,67,.45);box-shadow:0 0 18px rgba(212,168,67,.15)">🥂</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Formal Banquet</div>
+                  <span class="itin-event-time">6:00 – 10:00 PM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DAY 2 -->
+        <div class="itin-panel" id="itin-day-1">
+          <div class="itin-tbd">
+            <span class="itin-tbd-emoji">🌅</span>
+            <div class="itin-tbd-text">Plans coming soon</div>
+            <div class="itin-tbd-sub">April 3rd · Windsor</div>
+          </div>
+        </div>
+
+        <!-- DAY 3 -->
+        <div class="itin-panel" id="itin-day-2">
+          <div class="itin-timeline">
+            <div class="itin-t-line"></div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">🌄</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Morning together</div>
+                  <span class="itin-event-time">TBD</span>
+                </div>
+              </div>
+            </div>
+            <div class="itin-event">
+              <div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">✈️</div>
+              <div class="itin-event-body">
+                <div class="itin-event-head">
+                  <div class="itin-event-title">Kaitlyn departs Windsor</div>
+                  <span class="itin-event-time">8:43 AM</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end #main-content -->
+
+<script>
+// ══════════════════════════════════════════════════════
+//  PASSWORD HASH (SHA-256 — not the real password)
+//  To change password: open browser console and run:
+//  crypto.subtle.digest("SHA-256", new TextEncoder().encode("newpassword"))
+//    .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
+// ══════════════════════════════════════════════════════
+const PASSWORD_HASH = "cb04a0f2219276a42b9a42f1e38c680f5c337fc83a0ca020a8c024eab114edd1";
+
+// ══════════════════════════════════════════════════════
+//  SENSITIVE DATA (base64 encoded — not plaintext in source)
+//  To encode: open browser console, type: btoa("yourvalue")
+// ══════════════════════════════════════════════════════
+const SECRETS = {
+  // Passengers
+  "flight-passenger":  "UGhhbQ==",                          // Pham
+  "ktrain-passenger":  "TGluaCBOaGkgUGhhbQ==",              // Linh Nhi Pham
+  "jtrain-passenger":  "Sm9hbw==",                          // Joao
+
+  // Booking codes
+  "flight-code":       "M1JYRVE3",                          // 3RXEQ7
+  "ktrain-code":       "MDZaVkgx",                          // 06ZVH1
+  "jtrain-code":       "VUEzUllI",                          // UA3RYH
+
+  // Links
+  "flight-href":       "aHR0cHM6Ly9yZXMuZmx5ZmxhaXIuY29tL3Jlcy9kZXRhaWxz",
+  // https://res.flyflair.com/res/details
+
+  "ktrain-href":       "aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldw==",
+  // https://reservia.viarail.ca/en/booking/view
+
+  "jtrain-href":       "aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldy9VQTNSWUg/dXRtX2NhbXBhaWduPXJlc2VydmlhLWJvb2tpbmcmdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPXJlc2VydmlhLWJvb2tpbmctYm9hcmRpbmctcGFzcyZ1dG1fY29udGVudD1jdGEtdmlldy1tb2RpZnktYm9va2luZw==",
+  // https://reservia.viarail.ca/en/booking/view/UA3RYH?utm_campaign=...
+};
+
+// ══════════════════════════════════════════════════════
+//  PASSWORD GATE
+// ══════════════════════════════════════════════════════
+async function sha256(str) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
+async function checkPassword() {
+  const input = document.getElementById('pw-input');
+  const errEl = document.getElementById('pw-error');
+
+  const hash = await sha256(input.value);
+
+  if (hash === PASSWORD_HASH) {
+    document.getElementById('pw-gate').classList.add('hidden');
+    document.getElementById('main-content').classList.add('visible');
+    injectSecrets();
+    bootPage();
+    setTimeout(() => { document.getElementById('pw-gate').remove(); }, 400);
+  } else {
+    input.classList.add('error');
+    errEl.classList.add('show');
+    input.value = '';
+    setTimeout(() => { input.classList.remove('error'); }, 400);
+  }
+}
+
+function injectSecrets() {
+  // Fill text spans
+  document.querySelectorAll('[data-secret]').forEach(el => {
+    const key = el.getAttribute('data-secret');
+    if (SECRETS[key]) {
+      el.textContent = atob(SECRETS[key]);
+    }
+  });
+
+  // Fill link hrefs
+  document.querySelectorAll('[data-secret-href]').forEach(el => {
+    const key = el.getAttribute('data-secret-href');
+    if (SECRETS[key]) {
+      el.href = atob(SECRETS[key]);
+      el.classList.remove('disabled');
+    }
+  });
+}
+
+document.getElementById('pw-input').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') checkPassword();
+  document.getElementById('pw-error').classList.remove('show');
+  this.classList.remove('error');
+});
+
+document.getElementById('pw-btn').addEventListener('click', checkPassword);
+
+// ══════════════════════════════════════════════════════
+//  PAGE SCRIPTS (run after auth)
+// ══════════════════════════════════════════════════════
+function bootPage() {
+
+  // ITINERARY TABS
+  window.switchDay = function(idx) {
+    document.querySelectorAll('.itin-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
+    document.querySelectorAll('.itin-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
+  };
+
+  // STARS
+  const sf = document.getElementById('sf');
+  const starCount = window.innerWidth < 480 ? 100 : 200;
+  for (let i = 0; i < starCount; i++) {
+    const el = document.createElement('div');
+    el.className = 's';
+    const sz = Math.random() * 1.8 + 0.3;
+    const lo = (Math.random() * 0.22 + 0.03).toFixed(2);
+    const hi = (parseFloat(lo) + Math.random() * 0.45 + 0.15).toFixed(2);
+    el.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--lo:${lo};--hi:${hi};--d:${(Math.random()*5+2).toFixed(1)}s;--dl:-${(Math.random()*8).toFixed(1)}s`;
+    sf.appendChild(el);
+  }
+
+  // PARTICLES
+  const pc = ['var(--rose)','var(--lavender)','var(--sky)','var(--gold)'];
+  for (let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    el.className = 'particle';
+    const sz = Math.random() * 3.5 + 1.5;
+    el.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:${Math.random()*15}%;background:${pc[Math.floor(Math.random()*pc.length)]};--fd:${(Math.random()*16+10).toFixed(1)}s;--fdl:-${(Math.random()*14).toFixed(1)}s`;
+    document.body.appendChild(el);
+  }
+
+  // COUNTDOWN
+  const target = new Date('2026-04-02T13:00:00-04:00').getTime();
+  function pad(n) { return String(n).padStart(2,'0'); }
+  function tick() {
+    const diff = target - Date.now();
+    if (diff <= 0) {
+      ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
+      return;
+    }
+    document.getElementById('cd-d').textContent = pad(Math.floor(diff / 86400000));
+    document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+    document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
+    document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
+  }
+  tick(); setInterval(tick, 1000);
+
+  // MODALS
+  let scrollY = 0;
+  window.openModal = function(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+    scrollY = window.scrollY;
+    document.body.style.position = 'fixed';
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = '100%';
+  };
+  window.closeModal = function(id) {
+    document.getElementById(id).classList.remove('open');
+    document.body.style.position = '';
+    document.body.style.top = '';
+    document.body.style.width = '';
+    window.scrollTo(0, scrollY);
+  };
+  window.closeOnBg = function(e, id) {
+    if (e.target === e.currentTarget) closeModal(id);
+  };
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
+    }
+  });
+}
+</script>
+</body>
+</html>
