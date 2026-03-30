@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<title>Kaitlyn & Joao · April 2</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="referrer" content="no-referrer">
+<title>Kaitlyn &amp; Joao · April 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -22,6 +24,8 @@
   }
 
   *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior: smooth; }
 
   body {
     background: var(--navy);
@@ -58,10 +62,11 @@
     flex-direction: column;
     gap: 0;
     padding: 24px;
-    transition: opacity .35s ease;
+    transition: opacity .45s ease, filter .45s ease;
   }
   #pw-gate.hidden {
     opacity: 0;
+    filter: blur(6px);
     pointer-events: none;
   }
   .pw-wrap {
@@ -104,11 +109,12 @@
     letter-spacing: .1em;
     text-align: center;
     outline: none;
-    transition: border-color .2s;
+    transition: border-color .2s, box-shadow .2s;
     -webkit-appearance: none;
   }
   #pw-input:focus {
     border-color: rgba(201,96,122,.45);
+    box-shadow: 0 0 20px rgba(201,96,122,.08);
   }
   #pw-input.error {
     border-color: rgba(201,96,122,.8);
@@ -153,6 +159,46 @@
     background: linear-gradient(135deg, rgba(201,96,122,.28), rgba(136,120,184,.28));
     border-color: rgba(201,96,122,.55);
   }
+  .pw-remember {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .pw-remember input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.04);
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .pw-remember input[type="checkbox"]:checked {
+    background: rgba(201,96,122,.25);
+    border-color: rgba(201,96,122,.5);
+  }
+  .pw-remember input[type="checkbox"]:checked::after {
+    content: '\2713';
+    position: absolute;
+    top: -1px;
+    left: 2px;
+    font-size: 10px;
+    color: var(--white);
+  }
+  .pw-remember-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
   .pw-rule {
     width: 30px; height: 1px;
     background: linear-gradient(90deg, transparent, var(--lavender), transparent);
@@ -167,17 +213,15 @@
     display: block;
   }
 
-  /* ─── REDACTED SPANS ─── */
-  .redacted {
-    display: inline-block;
-    background: rgba(255,255,255,0.08);
-    border-radius: 3px;
-    color: transparent;
-    user-select: none;
-    letter-spacing: 0;
-    min-width: 80px;
-    height: 1em;
-    vertical-align: middle;
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s cubic-bezier(.22,1,.36,1), transform .7s cubic-bezier(.22,1,.36,1);
+  }
+  .reveal.shown {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* ─── STARFIELD ─── */
@@ -260,6 +304,7 @@
     line-height:1; font-weight:300;
     color:var(--gold); display:block;
     letter-spacing:-.02em;
+    transition: color .5s;
   }
   .cd-label {
     font-family:'DM Mono', monospace;
@@ -279,6 +324,22 @@
     display: flex; align-items: center; justify-content: center;
     padding-top: 0; padding-bottom: 14px;
     flex-shrink: 0;
+  }
+
+  .countdown.arrived .cd-num { color: var(--rose); }
+  .cd-arrived-msg {
+    display: none;
+    text-align: center;
+    margin-top: -64px;
+    margin-bottom: 80px;
+  }
+  .cd-arrived-msg.show { display: block; }
+  .cd-arrived-msg span {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--rose);
+    font-style: italic;
   }
 
   /* ─── SECTION LABEL ─── */
@@ -302,7 +363,11 @@
     opacity:.18;
   }
 
-  .segment { display:flex; gap:22px; margin-bottom:22px; align-items:flex-start; }
+  .segment {
+    display:flex; gap:22px; margin-bottom:22px; align-items:flex-start;
+    transition: transform .25s ease;
+  }
+  .segment:hover { transform: translateX(4px); }
 
   .seg-icon {
     width:54px; height:54px; border-radius:50%;
@@ -310,7 +375,9 @@
     font-size:21px; flex-shrink:0; position:relative; z-index:1;
     border:1px solid var(--border);
     background: rgba(255,255,255,0.03);
+    transition: transform .3s ease, box-shadow .3s ease;
   }
+  .segment:hover .seg-icon { transform: scale(1.08); }
   .seg-icon.i-flight  { border-color:rgba(77,184,232,.3); box-shadow:0 0 18px rgba(77,184,232,.08); }
   .seg-icon.i-klav    { border-color:rgba(136,120,184,.3); box-shadow:0 0 18px rgba(136,120,184,.08); }
   .seg-icon.i-gold    { border-color:rgba(212,168,67,.3); box-shadow:0 0 18px rgba(212,168,67,.08); }
@@ -355,6 +422,11 @@
     border:1px solid var(--border);
     border-radius:8px; padding:16px 18px;
     position:relative; overflow:hidden;
+    transition: border-color .3s ease, box-shadow .3s ease;
+  }
+  .segment:hover .seg-visual {
+    border-color: rgba(255,255,255,0.12);
+    box-shadow: 0 4px 24px rgba(0,0,0,.2);
   }
   .route-row { display:flex; align-items:center; gap:12px; }
   .route-end { display:flex; flex-direction:column; gap:3px; }
@@ -402,6 +474,11 @@
     border:1px solid rgba(201,96,122,.15);
     border-radius:16px; padding:52px 32px;
     position:relative; overflow:hidden;
+    transition: border-color .4s ease, box-shadow .4s ease;
+  }
+  .reunion:hover {
+    border-color: rgba(201,96,122,.28);
+    box-shadow: 0 0 60px rgba(201,96,122,.06);
   }
   .reunion::after {
     content:'';
@@ -433,6 +510,28 @@
     font-size:11px; color:var(--muted); font-style:italic; margin-top:10px;
   }
 
+  /* ─── FOOTER ─── */
+  .footer {
+    text-align: center;
+    padding: 48px 24px 0;
+    margin-top: 72px;
+    border-top: 1px solid rgba(255,255,255,.04);
+  }
+  .footer-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 8px;
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: var(--faint);
+  }
+  .footer-heart {
+    display: inline-block;
+    color: var(--rose);
+    opacity: .4;
+    font-size: 10px;
+    margin: 0 2px;
+  }
+
   /* ─── BOARDING PASS MODAL ─── */
   .modal-overlay {
     position:fixed; inset:0; z-index:100;
@@ -444,6 +543,7 @@
     transition:opacity .22s;
     padding: max(56px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) max(32px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
     overflow-y: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
   }
   .modal-overlay.open { opacity:1; pointer-events:auto; }
@@ -472,7 +572,7 @@
     min-height: 44px;
   }
   .bp-close:hover, .bp-close:active { color: var(--white); }
-  .bp-close::before { content: '✕'; font-size: 14px; }
+  .bp-close::before { content: '\2715'; font-size: 14px; }
 
   .bp-body {
     background: #0d1325;
@@ -558,7 +658,7 @@
   }
   .bp-perf-notch {
     width: 20px; height: 20px; border-radius: 50%;
-    background: #060a17;
+    background: #0d1325;
     border: 1px solid rgba(255,255,255,.09);
     flex-shrink: 0;
   }
@@ -704,9 +804,10 @@
   }
   .itin-tab-label { display: block; font-size: 7px; opacity: .65; }
 
-  .itin-panels { padding: 24px 24px 28px; }
-  .itin-panel { display: none; }
+  .itin-panels { padding: 24px 24px 28px; position: relative; }
+  .itin-panel { display: none; animation: panelIn .3s ease; }
   .itin-panel.active { display: block; }
+  @keyframes panelIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
   .itin-timeline { position: relative; }
   .itin-t-line {
@@ -774,9 +875,11 @@
     .page { padding-top: 56px; }
     header { margin-bottom: 44px; }
     .countdown { margin-bottom: 56px; }
+    .cd-arrived-msg { margin-top: -40px; margin-bottom: 56px; }
     .seg-head { flex-direction: column; align-items: flex-start; gap: 8px; }
     .ticket-btn { margin-top: 0; align-self: flex-start; }
     .segment { gap: 14px; margin-bottom: 18px; }
+    .segment:hover { transform: none; }
     .seg-icon { width: 44px; height: 44px; font-size: 18px; flex-shrink: 0; }
     .j-line { left: 22px; }
     .route-code { font-size: 22px; }
@@ -791,35 +894,24 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     PASSWORD GATE
-     Change the password in the JS below.
-══════════════════════════════════════ -->
 <div id="pw-gate">
   <div class="pw-wrap">
-    <span class="pw-icon">🔒</span>
+    <span class="pw-icon">&#x1f512;</span>
     <div class="pw-title">Private Page</div>
     <div class="pw-sub">Enter password to continue</div>
     <div class="pw-input-wrap">
-      <input
-        id="pw-input"
-        type="password"
-        placeholder="••••••••"
-        autocomplete="off"
-        autocorrect="off"
-        autocapitalize="off"
-        spellcheck="false"
-      />
+      <input id="pw-input" type="password" placeholder="&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" autofocus aria-label="Password" />
     </div>
     <div id="pw-error">Incorrect password</div>
     <button id="pw-btn">Enter</button>
+    <label class="pw-remember">
+      <input type="checkbox" id="pw-remember" />
+      <span class="pw-remember-label">Remember this device</span>
+    </label>
     <div class="pw-rule"></div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════
-     MAIN CONTENT (hidden until auth)
-══════════════════════════════════════ -->
 <div id="main-content">
 
 <div id="sf"></div>
@@ -827,13 +919,13 @@
 
 <div class="page">
 
-  <header>
+  <header class="reveal">
     <p class="eyebrow">April 2, 2026 · London, Ontario</p>
     <h1><em>Kaitlyn</em><br>&amp; Joao.</h1>
     <div class="header-rule"></div>
   </header>
 
-  <div class="countdown">
+  <div class="countdown reveal" id="countdown">
     <div class="cd-block"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
     <div class="cd-sep">:</div>
     <div class="cd-block"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
@@ -842,22 +934,22 @@
     <div class="cd-sep">:</div>
     <div class="cd-block"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Seconds</span></div>
   </div>
+  <div class="cd-arrived-msg" id="cd-arrived-msg"><span>she's here &#x1f495;</span></div>
 
-  <div class="sec-label">The Journey</div>
+  <div class="sec-label reveal">The Journey</div>
 
   <div class="journey">
     <div class="j-line"></div>
 
-    <!-- KAITLYN FLIGHT -->
-    <div class="segment">
-      <div class="seg-icon i-flight">✈️</div>
+    <div class="segment reveal">
+      <div class="seg-icon i-flight">&#x2708;&#xfe0f;</div>
       <div class="seg-body">
         <div class="seg-head">
           <div>
             <div class="seg-title">Kaitlyn's Flight</div>
             <div class="seg-meta">F8 664 · Apr 1 → Apr 2 · Flair Airlines</div>
           </div>
-          <button class="ticket-btn sky" onclick="openModal('flight')">Boarding Pass ↗</button>
+          <button class="ticket-btn sky" onclick="openModal('flight')">Boarding Pass &#x2197;</button>
         </div>
         <div class="seg-visual">
           <svg class="f-arc" viewBox="0 0 400 24" preserveAspectRatio="none">
@@ -884,16 +976,15 @@
       </div>
     </div>
 
-    <!-- KAITLYN TRAIN -->
-    <div class="segment">
-      <div class="seg-icon i-klav">🚆</div>
+    <div class="segment reveal">
+      <div class="seg-icon i-klav">&#x1f686;</div>
       <div class="seg-body">
         <div class="seg-head">
           <div>
             <div class="seg-title">Kaitlyn's Train</div>
             <div class="seg-meta">VIA Rail · Toronto → London</div>
           </div>
-          <button class="ticket-btn" onclick="openModal('ktrain')">View Ticket ↗</button>
+          <button class="ticket-btn" onclick="openModal('ktrain')">View Ticket &#x2197;</button>
         </div>
         <div class="seg-visual">
           <div class="route-row">
@@ -917,16 +1008,15 @@
       </div>
     </div>
 
-    <!-- JOAO TRAIN -->
-    <div class="segment">
-      <div class="seg-icon i-gold">🚂</div>
+    <div class="segment reveal">
+      <div class="seg-icon i-gold">&#x1f682;</div>
       <div class="seg-body">
         <div class="seg-head">
           <div>
             <div class="seg-title">Joao's Train</div>
             <div class="seg-meta">VIA Rail · Windsor → London</div>
           </div>
-          <button class="ticket-btn gold" onclick="openModal('jtrain')">View Ticket ↗</button>
+          <button class="ticket-btn gold" onclick="openModal('jtrain')">View Ticket &#x2197;</button>
         </div>
         <div class="seg-visual">
           <div class="route-row">
@@ -950,14 +1040,13 @@
       </div>
     </div>
 
-    <!-- BUNNIES TRAIN -->
-    <div class="segment">
-      <div class="seg-icon i-rose" style="font-size:14px;letter-spacing:-2px;padding-left:2px">🐰🐰</div>
+    <div class="segment reveal">
+      <div class="seg-icon i-rose" style="font-size:14px;letter-spacing:-2px;padding-left:2px">&#x1f430;&#x1f430;</div>
       <div class="seg-body">
         <div class="seg-head">
           <div>
             <div class="seg-title">Bunnies' Train</div>
-            <div class="seg-meta">VIA Rail · London → Windsor · Together 🤍</div>
+            <div class="seg-meta">VIA Rail · London → Windsor · Together &#x1f90d;</div>
           </div>
         </div>
         <div class="seg-visual">
@@ -984,24 +1073,28 @@
 
   </div>
 
-  <div class="sec-label">The Moment</div>
-  <div class="reunion">
-    <div class="heart">💕</div>
+  <div class="sec-label reveal">The Moment</div>
+  <div class="reunion reveal">
+    <div class="heart">&#x1f495;</div>
     <h2>London, Ontario</h2>
     <p class="when">April 2, 2026 · ~1:00 PM</p>
-    <p class="coxinha">🍗 coxinhas in hand, obviously.</p>
+    <p class="coxinha">&#x1f357; coxinhas in hand, obviously.</p>
     <button class="itin-btn" onclick="openModal('itinerary')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="12" height="12"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      Trip Itinerary ↗
+      Trip Itinerary &#x2197;
     </button>
+  </div>
+
+  <div class="footer reveal">
+    <p class="footer-text">made with <span class="footer-heart">&#x2665;</span> by joao</p>
   </div>
 
 </div>
 
-<!-- ── BOARDING PASS: Kaitlyn's Flight ── -->
+<!-- MODALS -->
 <div class="modal-overlay" id="modal-flight" onclick="closeOnBg(event,'modal-flight')">
   <div class="boarding-pass">
-    <button class="bp-close" onclick="closeModal('modal-flight')">Close</button>
+    <button class="bp-close" aria-label="Close" onclick="closeModal('modal-flight')">Close</button>
     <div class="bp-body">
       <span class="bp-accent" style="background:linear-gradient(90deg,#4db8e8,#60c8f4,rgba(77,184,232,0.2))"></span>
       <div class="bp-top">
@@ -1010,49 +1103,22 @@
           <span class="bp-type" style="color:var(--sky);border-color:rgba(77,184,232,.3)">F8 664</span>
         </div>
         <div class="bp-route">
-          <div class="bp-city">
-            <span class="bp-iata" style="color:var(--sky)">YXX</span>
-            <span class="bp-cityname">Abbotsford</span>
-          </div>
-          <div class="bp-track">
-            <span class="bp-track-icon">✈</span>
-            <div class="bp-track-line"></div>
-          </div>
-          <div class="bp-city right">
-            <span class="bp-iata" style="color:var(--sky)">YYZ</span>
-            <span class="bp-cityname">Toronto</span>
-          </div>
+          <div class="bp-city"><span class="bp-iata" style="color:var(--sky)">YXX</span><span class="bp-cityname">Abbotsford</span></div>
+          <div class="bp-track"><span class="bp-track-icon">&#x2708;</span><div class="bp-track-line"></div></div>
+          <div class="bp-city right"><span class="bp-iata" style="color:var(--sky)">YYZ</span><span class="bp-cityname">Toronto</span></div>
         </div>
         <div class="bp-times">
-          <div class="bp-time-block">
-            <span class="bp-time-lbl">Departs</span>
-            <span class="bp-time-val">11:05 PM</span>
-            <span class="bp-time-date">Apr 1, 2026</span>
-          </div>
-          <div class="bp-time-block right">
-            <span class="bp-time-lbl">Arrives</span>
-            <span class="bp-time-val">6:40 AM</span>
-            <span class="bp-time-date">Apr 2, 2026</span>
-          </div>
+          <div class="bp-time-block"><span class="bp-time-lbl">Departs</span><span class="bp-time-val">11:05 PM</span><span class="bp-time-date">Apr 1, 2026</span></div>
+          <div class="bp-time-block right"><span class="bp-time-lbl">Arrives</span><span class="bp-time-val">6:40 AM</span><span class="bp-time-date">Apr 2, 2026</span></div>
         </div>
       </div>
-      <div class="bp-perf">
-        <div class="bp-perf-notch left"></div>
-        <div class="bp-perf-line"></div>
-        <div class="bp-perf-notch right"></div>
-      </div>
+      <div class="bp-perf"><div class="bp-perf-notch left"></div><div class="bp-perf-line"></div><div class="bp-perf-notch right"></div></div>
       <div class="bp-stub">
         <div class="bp-fields">
-          <div class="bp-field">
-            <span class="bp-field-lbl">Passenger</span>
-            <span class="bp-field-val" data-secret="flight-passenger">••••••</span>
-          </div>
-          <div class="bp-field">
-            <span class="bp-field-lbl">Reservation</span>
-            <span class="bp-field-val booking" style="color:var(--sky)" data-secret="flight-code">••••••</span>
-          </div>
+          <div class="bp-field"><span class="bp-field-lbl">Passenger</span><span class="bp-field-val" data-s="fp">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
+          <div class="bp-field"><span class="bp-field-lbl">Reservation</span><span class="bp-field-val booking" style="color:var(--sky)" data-s="fc">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
         </div>
-        <a class="bp-link sky disabled" id="flight-link" href="#" target="_blank" rel="noopener" data-secret-href="flight-href">
+        <a class="bp-link sky disabled" href="#" target="_blank" rel="noopener noreferrer" data-sh="fh">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           Manage Booking
         </a>
@@ -1061,61 +1127,30 @@
   </div>
 </div>
 
-<!-- ── BOARDING PASS: Kaitlyn's Train ── -->
 <div class="modal-overlay" id="modal-ktrain" onclick="closeOnBg(event,'modal-ktrain')">
   <div class="boarding-pass">
-    <button class="bp-close" onclick="closeModal('modal-ktrain')">Close</button>
+    <button class="bp-close" aria-label="Close" onclick="closeModal('modal-ktrain')">Close</button>
     <div class="bp-body">
       <span class="bp-accent" style="background:linear-gradient(90deg,#8878b8,#a491d6,rgba(136,120,184,0.2))"></span>
       <div class="bp-top">
-        <div class="bp-carrier">
-          <span class="bp-carrier-name">VIA Rail Canada</span>
-          <span class="bp-type" style="color:var(--lavender);border-color:rgba(136,120,184,.3)">Train</span>
-        </div>
+        <div class="bp-carrier"><span class="bp-carrier-name">VIA Rail Canada</span><span class="bp-type" style="color:var(--lavender);border-color:rgba(136,120,184,.3)">Train</span></div>
         <div class="bp-route">
-          <div class="bp-city">
-            <span class="bp-iata" style="color:var(--lavender)">YYZ</span>
-            <span class="bp-cityname">Toronto</span>
-          </div>
-          <div class="bp-track">
-            <span class="bp-track-icon">🚆</span>
-            <div class="bp-track-line"></div>
-          </div>
-          <div class="bp-city right">
-            <span class="bp-iata" style="color:var(--lavender)">YXU</span>
-            <span class="bp-cityname">London</span>
-          </div>
+          <div class="bp-city"><span class="bp-iata" style="color:var(--lavender)">YYZ</span><span class="bp-cityname">Toronto</span></div>
+          <div class="bp-track"><span class="bp-track-icon">&#x1f686;</span><div class="bp-track-line"></div></div>
+          <div class="bp-city right"><span class="bp-iata" style="color:var(--lavender)">YXU</span><span class="bp-cityname">London</span></div>
         </div>
         <div class="bp-times">
-          <div class="bp-time-block">
-            <span class="bp-time-lbl">Departs</span>
-            <span class="bp-time-val">~11:00 AM</span>
-            <span class="bp-time-date">Apr 2, 2026</span>
-          </div>
-          <div class="bp-time-block right">
-            <span class="bp-time-lbl">Arrives</span>
-            <span class="bp-time-val">~1:00 PM</span>
-            <span class="bp-time-date">Apr 2, 2026</span>
-          </div>
+          <div class="bp-time-block"><span class="bp-time-lbl">Departs</span><span class="bp-time-val">~11:00 AM</span><span class="bp-time-date">Apr 2, 2026</span></div>
+          <div class="bp-time-block right"><span class="bp-time-lbl">Arrives</span><span class="bp-time-val">~1:00 PM</span><span class="bp-time-date">Apr 2, 2026</span></div>
         </div>
       </div>
-      <div class="bp-perf">
-        <div class="bp-perf-notch left"></div>
-        <div class="bp-perf-line"></div>
-        <div class="bp-perf-notch right"></div>
-      </div>
+      <div class="bp-perf"><div class="bp-perf-notch left"></div><div class="bp-perf-line"></div><div class="bp-perf-notch right"></div></div>
       <div class="bp-stub">
         <div class="bp-fields">
-          <div class="bp-field">
-            <span class="bp-field-lbl">Passenger</span>
-            <span class="bp-field-val" data-secret="ktrain-passenger">••••••••••</span>
-          </div>
-          <div class="bp-field">
-            <span class="bp-field-lbl">Booking</span>
-            <span class="bp-field-val booking" style="color:var(--lavender)" data-secret="ktrain-code">••••••</span>
-          </div>
+          <div class="bp-field"><span class="bp-field-lbl">Passenger</span><span class="bp-field-val" data-s="kp">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
+          <div class="bp-field"><span class="bp-field-lbl">Booking</span><span class="bp-field-val booking" style="color:var(--lavender)" data-s="kc">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
         </div>
-        <a class="bp-link lav disabled" id="ktrain-link" href="#" target="_blank" rel="noopener" data-secret-href="ktrain-href">
+        <a class="bp-link lav disabled" href="#" target="_blank" rel="noopener noreferrer" data-sh="kh">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           View Booking
         </a>
@@ -1124,61 +1159,30 @@
   </div>
 </div>
 
-<!-- ── BOARDING PASS: Joao's Train ── -->
 <div class="modal-overlay" id="modal-jtrain" onclick="closeOnBg(event,'modal-jtrain')">
   <div class="boarding-pass">
-    <button class="bp-close" onclick="closeModal('modal-jtrain')">Close</button>
+    <button class="bp-close" aria-label="Close" onclick="closeModal('modal-jtrain')">Close</button>
     <div class="bp-body">
       <span class="bp-accent" style="background:linear-gradient(90deg,#d4a843,#e2bb56,rgba(212,168,67,0.2))"></span>
       <div class="bp-top">
-        <div class="bp-carrier">
-          <span class="bp-carrier-name">VIA Rail Canada</span>
-          <span class="bp-type" style="color:var(--gold);border-color:rgba(212,168,67,.3)">Train</span>
-        </div>
+        <div class="bp-carrier"><span class="bp-carrier-name">VIA Rail Canada</span><span class="bp-type" style="color:var(--gold);border-color:rgba(212,168,67,.3)">Train</span></div>
         <div class="bp-route">
-          <div class="bp-city">
-            <span class="bp-iata" style="color:var(--gold)">YQG</span>
-            <span class="bp-cityname">Windsor</span>
-          </div>
-          <div class="bp-track">
-            <span class="bp-track-icon">🚂</span>
-            <div class="bp-track-line"></div>
-          </div>
-          <div class="bp-city right">
-            <span class="bp-iata" style="color:var(--gold)">YXU</span>
-            <span class="bp-cityname">London</span>
-          </div>
+          <div class="bp-city"><span class="bp-iata" style="color:var(--gold)">YQG</span><span class="bp-cityname">Windsor</span></div>
+          <div class="bp-track"><span class="bp-track-icon">&#x1f682;</span><div class="bp-track-line"></div></div>
+          <div class="bp-city right"><span class="bp-iata" style="color:var(--gold)">YXU</span><span class="bp-cityname">London</span></div>
         </div>
         <div class="bp-times">
-          <div class="bp-time-block">
-            <span class="bp-time-lbl">Departs</span>
-            <span class="bp-time-val">8:43 AM</span>
-            <span class="bp-time-date">Apr 2, 2026</span>
-          </div>
-          <div class="bp-time-block right">
-            <span class="bp-time-lbl">Arrives</span>
-            <span class="bp-time-val">10:39 AM</span>
-            <span class="bp-time-date">Apr 2, 2026</span>
-          </div>
+          <div class="bp-time-block"><span class="bp-time-lbl">Departs</span><span class="bp-time-val">8:43 AM</span><span class="bp-time-date">Apr 2, 2026</span></div>
+          <div class="bp-time-block right"><span class="bp-time-lbl">Arrives</span><span class="bp-time-val">10:39 AM</span><span class="bp-time-date">Apr 2, 2026</span></div>
         </div>
       </div>
-      <div class="bp-perf">
-        <div class="bp-perf-notch left"></div>
-        <div class="bp-perf-line"></div>
-        <div class="bp-perf-notch right"></div>
-      </div>
+      <div class="bp-perf"><div class="bp-perf-notch left"></div><div class="bp-perf-line"></div><div class="bp-perf-notch right"></div></div>
       <div class="bp-stub">
         <div class="bp-fields">
-          <div class="bp-field">
-            <span class="bp-field-lbl">Passenger</span>
-            <span class="bp-field-val" data-secret="jtrain-passenger">••••</span>
-          </div>
-          <div class="bp-field">
-            <span class="bp-field-lbl">Booking</span>
-            <span class="bp-field-val booking" style="color:var(--gold)" data-secret="jtrain-code">••••••</span>
-          </div>
+          <div class="bp-field"><span class="bp-field-lbl">Passenger</span><span class="bp-field-val" data-s="jp">&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
+          <div class="bp-field"><span class="bp-field-lbl">Booking</span><span class="bp-field-val booking" style="color:var(--gold)" data-s="jc">&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;&#x2022;</span></div>
         </div>
-        <a class="bp-link gold disabled" id="jtrain-link" href="#" target="_blank" rel="noopener" data-secret-href="jtrain-href">
+        <a class="bp-link gold disabled" href="#" target="_blank" rel="noopener noreferrer" data-sh="jh">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           View Booking
         </a>
@@ -1187,311 +1191,100 @@
   </div>
 </div>
 
-<!-- ── ITINERARY MODAL ── -->
 <div class="modal-overlay" id="modal-itinerary" onclick="closeOnBg(event,'modal-itinerary')">
   <div class="itin-modal">
-    <button class="bp-close" onclick="closeModal('modal-itinerary')">Close</button>
+    <button class="bp-close" aria-label="Close" onclick="closeModal('modal-itinerary')">Close</button>
     <div class="itin-body">
       <span class="bp-accent" style="background:linear-gradient(90deg,#d4a843,#c9607a,rgba(136,120,184,0.2))"></span>
       <div class="itin-header">
-        <div class="itin-header-top">
-          <span class="itin-eyebrow">April 2 – 4, 2026 · Windsor</span>
-        </div>
-        <div class="itin-title">Our Trip 🤍</div>
+        <div class="itin-header-top"><span class="itin-eyebrow">April 2 – 4, 2026 · Windsor</span></div>
+        <div class="itin-title">Our Trip &#x1f90d;</div>
       </div>
-
       <div class="itin-tabs">
-        <button class="itin-tab active" onclick="switchDay(0)">
-          <span class="itin-tab-date">Apr 2</span>
-          <span class="itin-tab-label">Arrival Day</span>
-        </button>
-        <button class="itin-tab" onclick="switchDay(1)">
-          <span class="itin-tab-date">Apr 3</span>
-          <span class="itin-tab-label">Day Two</span>
-        </button>
-        <button class="itin-tab" onclick="switchDay(2)">
-          <span class="itin-tab-date">Apr 4</span>
-          <span class="itin-tab-label">Departure</span>
-        </button>
+        <button class="itin-tab active" onclick="switchDay(0)"><span class="itin-tab-date">Apr 2</span><span class="itin-tab-label">Arrival Day</span></button>
+        <button class="itin-tab" onclick="switchDay(1)"><span class="itin-tab-date">Apr 3</span><span class="itin-tab-label">Day Two</span></button>
+        <button class="itin-tab" onclick="switchDay(2)"><span class="itin-tab-date">Apr 4</span><span class="itin-tab-label">Departure</span></button>
       </div>
-
       <div class="itin-panels">
-
-        <!-- DAY 1 -->
         <div class="itin-panel active" id="itin-day-0">
           <div class="itin-timeline">
             <div class="itin-t-line"></div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">🚂</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Joao departs Windsor</div>
-                  <span class="itin-event-time">8:43 AM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">✈️</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Kaitlyn arrives Toronto</div>
-                  <span class="itin-event-time">6:40 AM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(136,120,184,.3);box-shadow:0 0 14px rgba(136,120,184,.08)">🚆</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Kaitlyn's train to London</div>
-                  <span class="itin-event-time">~11:00 AM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.12)">💕</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Reunion in London</div>
-                  <span class="itin-event-time">~1:00 PM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">🚂</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Train home together</div>
-                  <span class="itin-event-time">1:45 PM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">🏠</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Arrive home · get dressed</div>
-                  <span class="itin-event-time">~3:45 PM</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(212,168,67,.45);box-shadow:0 0 18px rgba(212,168,67,.15)">🥂</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Formal Banquet</div>
-                  <span class="itin-event-time">6:00 – 10:00 PM</span>
-                </div>
-              </div>
-            </div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">&#x1f682;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Joao departs Windsor</div><span class="itin-event-time">8:43 AM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">&#x2708;&#xfe0f;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Kaitlyn arrives Toronto</div><span class="itin-event-time">6:40 AM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(136,120,184,.3);box-shadow:0 0 14px rgba(136,120,184,.08)">&#x1f686;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Kaitlyn's train to London</div><span class="itin-event-time">~11:00 AM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.12)">&#x1f495;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Reunion in London</div><span class="itin-event-time">~1:00 PM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">&#x1f682;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Train home together</div><span class="itin-event-time">1:45 PM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(212,168,67,.3);box-shadow:0 0 14px rgba(212,168,67,.08)">&#x1f3e0;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Arrive home · get dressed</div><span class="itin-event-time">~3:45 PM</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(212,168,67,.45);box-shadow:0 0 18px rgba(212,168,67,.15)">&#x1f942;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Formal Banquet</div><span class="itin-event-time">6:00 – 10:00 PM</span></div></div></div>
           </div>
         </div>
-
-        <!-- DAY 2 -->
         <div class="itin-panel" id="itin-day-1">
-          <div class="itin-tbd">
-            <span class="itin-tbd-emoji">🌅</span>
-            <div class="itin-tbd-text">Plans coming soon</div>
-            <div class="itin-tbd-sub">April 3rd · Windsor</div>
-          </div>
+          <div class="itin-tbd"><span class="itin-tbd-emoji">&#x1f305;</span><div class="itin-tbd-text">Plans coming soon</div><div class="itin-tbd-sub">April 3rd · Windsor</div></div>
         </div>
-
-        <!-- DAY 3 -->
         <div class="itin-panel" id="itin-day-2">
           <div class="itin-timeline">
             <div class="itin-t-line"></div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">🌄</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Morning together</div>
-                  <span class="itin-event-time">TBD</span>
-                </div>
-              </div>
-            </div>
-            <div class="itin-event">
-              <div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">✈️</div>
-              <div class="itin-event-body">
-                <div class="itin-event-head">
-                  <div class="itin-event-title">Kaitlyn departs Windsor</div>
-                  <span class="itin-event-time">8:43 AM</span>
-                </div>
-              </div>
-            </div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(201,96,122,.35);box-shadow:0 0 14px rgba(201,96,122,.08)">&#x1f304;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Morning together</div><span class="itin-event-time">TBD</span></div></div></div>
+            <div class="itin-event"><div class="itin-dot" style="border-color:rgba(77,184,232,.3);box-shadow:0 0 14px rgba(77,184,232,.08)">&#x2708;&#xfe0f;</div><div class="itin-event-body"><div class="itin-event-head"><div class="itin-event-title">Kaitlyn departs Windsor</div><span class="itin-event-time">8:43 AM</span></div></div></div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </div>
 
-</div><!-- end #main-content -->
+</div>
 
 <script>
-// ══════════════════════════════════════════════════════
-//  PASSWORD HASH (SHA-256 — not the real password)
-//  To change password: open browser console and run:
-//  crypto.subtle.digest("SHA-256", new TextEncoder().encode("newpassword"))
-//    .then(b => console.log(Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')))
-// ══════════════════════════════════════════════════════
-const PASSWORD_HASH = "cb04a0f2219276a42b9a42f1e38c680f5c337fc83a0ca020a8c024eab114edd1";
+var H="cb04a0f2219276a42b9a42f1e38c680f5c337fc83a0ca020a8c024eab114edd1";
+var K="kj26a";
+var D={fp:"UGhhbQ==",kp:"TGluaCBOaGkgUGhhbQ==",jp:"Sm9hbw==",fc:"M1JYRVE3",kc:"MDZaVkgx",jc:"VUEzUllI",fh:"aHR0cHM6Ly9yZXMuZmx5ZmxhaXIuY29tL3Jlcy9kZXRhaWxz",kh:"aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldw==",jh:"aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldy9VQTNSWUg/dXRtX2NhbXBhaWduPXJlc2VydmlhLWJvb2tpbmcmdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPXJlc2VydmlhLWJvb2tpbmctYm9hcmRpbmctcGFzcyZ1dG1fY29udGVudD1jdGEtdmlldy1tb2RpZnktYm9va2luZw=="};
 
-// ══════════════════════════════════════════════════════
-//  SENSITIVE DATA (base64 encoded — not plaintext in source)
-//  To encode: open browser console, type: btoa("yourvalue")
-// ══════════════════════════════════════════════════════
-const SECRETS = {
-  // Passengers
-  "flight-passenger":  "UGhhbQ==",                          // Pham
-  "ktrain-passenger":  "TGluaCBOaGkgUGhhbQ==",              // Linh Nhi Pham
-  "jtrain-passenger":  "Sm9hbw==",                          // Joao
+async function sha256(s){var b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join("")}
 
-  // Booking codes
-  "flight-code":       "M1JYRVE3",                          // 3RXEQ7
-  "ktrain-code":       "MDZaVkgx",                          // 06ZVH1
-  "jtrain-code":       "VUEzUllI",                          // UA3RYH
+(async function(){try{var s=sessionStorage.getItem(K);if(s){var h=await sha256(s);if(h===H){unlock();return}}var l=localStorage.getItem(K);if(l){var h2=await sha256(l);if(h2===H){unlock();return}}}catch(e){}})();
 
-  // Links
-  "flight-href":       "aHR0cHM6Ly9yZXMuZmx5ZmxhaXIuY29tL3Jlcy9kZXRhaWxz",
-  // https://res.flyflair.com/res/details
+async function checkPassword(){var input=document.getElementById("pw-input");var errEl=document.getElementById("pw-error");var pw=input.value;var hash=await sha256(pw);if(hash===H){try{sessionStorage.setItem(K,pw);if(document.getElementById("pw-remember").checked)localStorage.setItem(K,pw)}catch(e){}unlock()}else{input.classList.add("error");errEl.classList.add("show");input.value="";setTimeout(function(){input.classList.remove("error")},400)}}
 
-  "ktrain-href":       "aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldw==",
-  // https://reservia.viarail.ca/en/booking/view
+function unlock(){document.getElementById("pw-gate").classList.add("hidden");document.getElementById("main-content").classList.add("visible");injectSecrets();bootPage();setTimeout(function(){var g=document.getElementById("pw-gate");if(g)g.remove()},500)}
 
-  "jtrain-href":       "aHR0cHM6Ly9yZXNlcnZpYS52aWFyYWlsLmNhL2VuL2Jvb2tpbmcvdmlldy9VQTNSWUg/dXRtX2NhbXBhaWduPXJlc2VydmlhLWJvb2tpbmcmdXRtX21lZGl1bT1lbWFpbCZ1dG1fc291cmNlPXJlc2VydmlhLWJvb2tpbmctYm9hcmRpbmctcGFzcyZ1dG1fY29udGVudD1jdGEtdmlldy1tb2RpZnktYm9va2luZw==",
-  // https://reservia.viarail.ca/en/booking/view/UA3RYH?utm_campaign=...
-};
+function injectSecrets(){document.querySelectorAll("[data-s]").forEach(function(el){var k=el.getAttribute("data-s");if(D[k])el.textContent=atob(D[k])});document.querySelectorAll("[data-sh]").forEach(function(el){var k=el.getAttribute("data-sh");if(D[k]){el.href=atob(D[k]);el.classList.remove("disabled")}})}
 
-// ══════════════════════════════════════════════════════
-//  PASSWORD GATE
-// ══════════════════════════════════════════════════════
-async function sha256(str) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-}
+document.getElementById("pw-input").addEventListener("keydown",function(e){if(e.key==="Enter")checkPassword();document.getElementById("pw-error").classList.remove("show");this.classList.remove("error")});
+document.getElementById("pw-btn").addEventListener("click",checkPassword);
 
-async function checkPassword() {
-  const input = document.getElementById('pw-input');
-  const errEl = document.getElementById('pw-error');
+function bootPage(){
+  var revEls=document.querySelectorAll(".reveal");
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(entry){if(entry.isIntersecting){entry.target.classList.add("shown");obs.unobserve(entry.target)}})},{threshold:0.15,rootMargin:"0px 0px -40px 0px"});
+  revEls.forEach(function(el,i){el.style.transitionDelay=i*80+"ms";obs.observe(el)});
 
-  const hash = await sha256(input.value);
+  window.switchDay=function(idx){currentDay=idx;document.querySelectorAll(".itin-tab").forEach(function(t,i){t.classList.toggle("active",i===idx)});document.querySelectorAll(".itin-panel").forEach(function(p,i){p.classList.toggle("active",i===idx)})};
+  var currentDay=0;var totalDays=3;
 
-  if (hash === PASSWORD_HASH) {
-    document.getElementById('pw-gate').classList.add('hidden');
-    document.getElementById('main-content').classList.add('visible');
-    injectSecrets();
-    bootPage();
-    setTimeout(() => { document.getElementById('pw-gate').remove(); }, 400);
-  } else {
-    input.classList.add('error');
-    errEl.classList.add('show');
-    input.value = '';
-    setTimeout(() => { input.classList.remove('error'); }, 400);
-  }
-}
+  var sf=document.getElementById("sf");var sc=window.innerWidth<480?100:200;
+  for(var i=0;i<sc;i++){var el=document.createElement("div");el.className="s";var sz=Math.random()*1.8+0.3;var lo=(Math.random()*0.22+0.03).toFixed(2);var hi=(parseFloat(lo)+Math.random()*0.45+0.15).toFixed(2);el.style.cssText="width:"+sz+"px;height:"+sz+"px;left:"+Math.random()*100+"%;top:"+Math.random()*100+"%;--lo:"+lo+";--hi:"+hi+";--d:"+(Math.random()*5+2).toFixed(1)+"s;--dl:-"+(Math.random()*8).toFixed(1)+"s";sf.appendChild(el)}
 
-function injectSecrets() {
-  // Fill text spans
-  document.querySelectorAll('[data-secret]').forEach(el => {
-    const key = el.getAttribute('data-secret');
-    if (SECRETS[key]) {
-      el.textContent = atob(SECRETS[key]);
-    }
-  });
+  var pc=["var(--rose)","var(--lavender)","var(--sky)","var(--gold)"];
+  for(var i=0;i<12;i++){var el=document.createElement("div");el.className="particle";var sz=Math.random()*3.5+1.5;el.style.cssText="width:"+sz+"px;height:"+sz+"px;left:"+Math.random()*100+"%;bottom:"+Math.random()*15+"%;background:"+pc[Math.floor(Math.random()*pc.length)]+";--fd:"+(Math.random()*16+10).toFixed(1)+"s;--fdl:-"+(Math.random()*14).toFixed(1)+"s";document.body.appendChild(el)}
 
-  // Fill link hrefs
-  document.querySelectorAll('[data-secret-href]').forEach(el => {
-    const key = el.getAttribute('data-secret-href');
-    if (SECRETS[key]) {
-      el.href = atob(SECRETS[key]);
-      el.classList.remove('disabled');
-    }
-  });
-}
+  var target=new Date("2026-04-02T13:00:00-04:00").getTime();
+  function pad(n){return String(n).padStart(2,"0")}
+  var cdInterval;
+  function tick(){var diff=target-Date.now();if(diff<=0){["cd-d","cd-h","cd-m","cd-s"].forEach(function(id){document.getElementById(id).textContent="00"});document.getElementById("countdown").classList.add("arrived");document.getElementById("cd-arrived-msg").classList.add("show");if(cdInterval)clearInterval(cdInterval);return}document.getElementById("cd-d").textContent=pad(Math.floor(diff/86400000));document.getElementById("cd-h").textContent=pad(Math.floor((diff%86400000)/3600000));document.getElementById("cd-m").textContent=pad(Math.floor((diff%3600000)/60000));document.getElementById("cd-s").textContent=pad(Math.floor((diff%60000)/1000))}
+  tick();cdInterval=setInterval(tick,1000);
 
-document.getElementById('pw-input').addEventListener('keydown', function(e) {
-  if (e.key === 'Enter') checkPassword();
-  document.getElementById('pw-error').classList.remove('show');
-  this.classList.remove('error');
-});
-
-document.getElementById('pw-btn').addEventListener('click', checkPassword);
-
-// ══════════════════════════════════════════════════════
-//  PAGE SCRIPTS (run after auth)
-// ══════════════════════════════════════════════════════
-function bootPage() {
-
-  // ITINERARY TABS
-  window.switchDay = function(idx) {
-    document.querySelectorAll('.itin-tab').forEach((t, i) => t.classList.toggle('active', i === idx));
-    document.querySelectorAll('.itin-panel').forEach((p, i) => p.classList.toggle('active', i === idx));
-  };
-
-  // STARS
-  const sf = document.getElementById('sf');
-  const starCount = window.innerWidth < 480 ? 100 : 200;
-  for (let i = 0; i < starCount; i++) {
-    const el = document.createElement('div');
-    el.className = 's';
-    const sz = Math.random() * 1.8 + 0.3;
-    const lo = (Math.random() * 0.22 + 0.03).toFixed(2);
-    const hi = (parseFloat(lo) + Math.random() * 0.45 + 0.15).toFixed(2);
-    el.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--lo:${lo};--hi:${hi};--d:${(Math.random()*5+2).toFixed(1)}s;--dl:-${(Math.random()*8).toFixed(1)}s`;
-    sf.appendChild(el);
+  // Swipe support for itinerary tabs
+  var itinPanels=document.querySelector(".itin-panels");
+  if(itinPanels){var touchStartX=0;
+    itinPanels.addEventListener("touchstart",function(e){touchStartX=e.touches[0].clientX},{passive:true});
+    itinPanels.addEventListener("touchend",function(e){var dx=e.changedTouches[0].clientX-touchStartX;if(Math.abs(dx)>50){if(dx<0&&currentDay<totalDays-1){currentDay++;switchDay(currentDay)}else if(dx>0&&currentDay>0){currentDay--;switchDay(currentDay)}}},{passive:true});
   }
 
-  // PARTICLES
-  const pc = ['var(--rose)','var(--lavender)','var(--sky)','var(--gold)'];
-  for (let i = 0; i < 12; i++) {
-    const el = document.createElement('div');
-    el.className = 'particle';
-    const sz = Math.random() * 3.5 + 1.5;
-    el.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:${Math.random()*15}%;background:${pc[Math.floor(Math.random()*pc.length)]};--fd:${(Math.random()*16+10).toFixed(1)}s;--fdl:-${(Math.random()*14).toFixed(1)}s`;
-    document.body.appendChild(el);
-  }
-
-  // COUNTDOWN
-  const target = new Date('2026-04-02T13:00:00-04:00').getTime();
-  function pad(n) { return String(n).padStart(2,'0'); }
-  function tick() {
-    const diff = target - Date.now();
-    if (diff <= 0) {
-      ['cd-d','cd-h','cd-m','cd-s'].forEach(id => document.getElementById(id).textContent = '00');
-      return;
-    }
-    document.getElementById('cd-d').textContent = pad(Math.floor(diff / 86400000));
-    document.getElementById('cd-h').textContent = pad(Math.floor((diff % 86400000) / 3600000));
-    document.getElementById('cd-m').textContent = pad(Math.floor((diff % 3600000) / 60000));
-    document.getElementById('cd-s').textContent = pad(Math.floor((diff % 60000) / 1000));
-  }
-  tick(); setInterval(tick, 1000);
-
-  // MODALS
-  let scrollY = 0;
-  window.openModal = function(id) {
-    document.getElementById('modal-' + id).classList.add('open');
-    scrollY = window.scrollY;
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = '100%';
-  };
-  window.closeModal = function(id) {
-    document.getElementById(id).classList.remove('open');
-    document.body.style.position = '';
-    document.body.style.top = '';
-    document.body.style.width = '';
-    window.scrollTo(0, scrollY);
-  };
-  window.closeOnBg = function(e, id) {
-    if (e.target === e.currentTarget) closeModal(id);
-  };
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      document.querySelectorAll('.modal-overlay.open').forEach(m => closeModal(m.id));
-    }
-  });
+  var openCount=0;
+  window.openModal=function(id){document.getElementById("modal-"+id).classList.add("open");openCount++;if(openCount===1){document.documentElement.style.overflow="hidden";document.body.style.overflow="hidden"}};
+  window.closeModal=function(id){document.getElementById(id).classList.remove("open");openCount=Math.max(0,openCount-1);if(openCount===0){document.documentElement.style.overflow="";document.body.style.overflow=""}};
+  window.closeOnBg=function(e,id){if(e.target===e.currentTarget)closeModal(id)};
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")document.querySelectorAll(".modal-overlay.open").forEach(function(m){closeModal(m.id)})});
 }
 </script>
 </body>
