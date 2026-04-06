@@ -1,0 +1,400 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Source Sans Pro', sans-serif;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    line-height: 1.6;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #161b22;
+    border-bottom: 1px solid #21262d;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.nav-links a {
+    font-family: 'Sora', sans-serif;
+    font-weight: 400;
+    font-size: 15px;
+    color: #8b949e;
+    text-decoration: none;
+    margin: 0 20px;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #58a6ff;
+}
+
+/* Hero / About */
+.hero {
+    display: flex;
+    gap: 50px;
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 0 40px;
+}
+
+.hero-left {
+    flex-shrink: 0;
+    width: 260px;
+}
+
+.profile-photo {
+    width: 260px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid #21262d;
+    margin-bottom: 20px;
+}
+
+.contact-info {
+    background-color: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.contact-info h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #8b949e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+}
+
+.contact-info p {
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.contact-info a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
+}
+
+.hero-right {
+    flex: 1;
+}
+
+.hero-right h1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: #f0f6fc;
+    margin-bottom: 20px;
+}
+
+.hero-right p {
+    font-size: 16px;
+    color: #c9d1d9;
+    margin-bottom: 16px;
+}
+
+/* Awards */
+.awards-section {
+    max-width: 1000px;
+    margin: 0 auto 60px auto;
+    padding: 0 40px;
+}
+
+.awards-section h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #f0f6fc;
+    margin-bottom: 25px;
+    padding-top: 40px;
+    border-top: 1px solid #21262d;
+}
+
+.awards-grid {
+    display: flex;
+    gap: 20px;
+}
+
+.award-card {
+    flex: 1;
+    background-color: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 25px;
+}
+
+.award-card h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 18px;
+    color: #f0f6fc;
+    margin-bottom: 10px;
+}
+
+.award-card p {
+    font-size: 15px;
+    color: #8b949e;
+}
+
+/* Resume */
+.resume-section {
+    max-width: 1000px;
+    margin: 0 auto 60px auto;
+    padding: 0 40px;
+}
+
+.resume-section h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #f0f6fc;
+    margin-bottom: 25px;
+    padding-top: 40px;
+    border-top: 1px solid #21262d;
+}
+
+.resume-container {
+    text-align: center;
+}
+
+.resume-img {
+    max-width: 700px;
+    width: 100%;
+    border-radius: 6px;
+    border: 1px solid #21262d;
+    margin-bottom: 20px;
+}
+
+.download-btn {
+    display: inline-block;
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    color: #f0f6fc;
+    background-color: #238636;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+    background-color: #2ea043;
+}
+
+/* Projects & Experience sections */
+.projects-section {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 0 40px;
+}
+
+.projects-section h1 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    color: #f0f6fc;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #21262d;
+}
+
+.project-block {
+    background-color: #161b22;
+    border: 1px solid #21262d;
+    border-radius: 8px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+.project-block h2 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #f0f6fc;
+    margin-bottom: 12px;
+}
+
+.project-block h3 {
+    font-family: 'Sora', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    color: #c9d1d9;
+    margin-top: 20px;
+    margin-bottom: 8px;
+}
+
+.project-block p {
+    font-size: 15px;
+    color: #8b949e;
+    margin-bottom: 10px;
+}
+
+.project-block a {
+    color: #58a6ff;
+    text-decoration: none;
+}
+
+.project-block a:hover {
+    text-decoration: underline;
+}
+
+.project-block video {
+    border-radius: 6px;
+    margin-top: 10px;
+}
+
+.project-block ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.project-block ul li {
+    margin-bottom: 8px;
+    font-size: 15px;
+}
+
+/* Experience block */
+.experience-block {
+    display: flex;
+    gap: 25px;
+    align-items: flex-start;
+}
+
+.company-logo {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 12px;
+    flex-shrink: 0;
+}
+
+.experience-content {
+    flex: 1;
+}
+
+.experience-content h2 {
+    margin-bottom: 4px;
+}
+
+.experience-content h3 {
+    margin-top: 0 !important;
+    color: #8b949e;
+    font-weight: 400;
+}
+
+.experience-content .date {
+    font-size: 13px;
+    color: #6e7681;
+    margin: 6px 0 12px 0;
+}
+
+.experience-content ul {
+    list-style: disc;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.experience-content ul li {
+    font-size: 14px;
+    color: #c9d1d9;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+/* Skills tags */
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.skills-list span {
+    display: inline-block;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    color: #58a6ff;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-family: 'Sora', sans-serif;
+}
+
+/* Footer */
+footer {
+    background-color: #161b22;
+    border-top: 1px solid #21262d;
+    text-align: center;
+    padding: 20px;
+}
+
+footer p {
+    font-size: 13px;
+    color: #484f58;
+}
+
+/* Responsive */
+@media (max-width: 700px) {
+    .hero {
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .hero-left {
+        width: 100%;
+        text-align: center;
+    }
+
+    .profile-photo {
+        width: 220px;
+        height: 260px;
+    }
+
+    .hero-right h1 {
+        text-align: center;
+    }
+
+    nav {
+        padding: 15px 20px;
+    }
+
+    .hero, .resume-section, .awards-section, .projects-section {
+        padding: 0 20px;
+    }
+
+    .awards-grid {
+        flex-direction: column;
+    }
+
+    .experience-block {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .experience-content ul {
+        text-align: left;
+    }
+}
