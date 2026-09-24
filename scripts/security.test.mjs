@@ -71,3 +71,13 @@ test("No unintended private configuration or build artifacts", () => {
     assert.ok(!/^\.env(?:\.|$)|node_modules|id_rsa|credentials/i.test(name));
 });
 
+test("Outbound and resume links open separately with opener protection", () => {
+  const links = [...js.matchAll(/<a\b[^>]*href="[^"]+"[^>]*>/g)].map(
+    (m) => m[0],
+  );
+  assert.ok(links.length >= 4);
+  for (const link of links) {
+    assert.match(link, /target="_blank"/);
+    assert.match(link, /rel="noopener noreferrer"/);
+  }
+});

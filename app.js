@@ -37,13 +37,13 @@ const sections = {
     title: "Connect",
     text: "Professional experience, projects, and contact.",
     extra:
-      '<a class="profile-link" href="https://www.linkedin.com/in/joao-pereira-6960822a4/" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="profile-link" href="https://github.com/joaopedromp" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="profile-link" href="joao-pereira-resume.pdf">Résumé <span>PDF ↗</span></a>',
+      '<a class="profile-link" href="https://www.linkedin.com/in/joao-pereira-6960822a4/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="profile-link" href="https://github.com/joaopedromp" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="profile-link" href="joao-pereira-resume.pdf" target="_blank" rel="noopener noreferrer">Résumé <span>PDF ↗</span></a>',
   },
   esports: {
     title: "Competitive Valorant",
     text: "I compete as jayp. My team history spans Brazil and North America, including SG e-Sports, Cardume, Cumberland Phoenix, 2Game Esports, and St. Clair Saints.",
     extra:
-      '<div class="results"><div><strong>5th–6th</strong><span>College VALORANT Championship 2026<small>St. Clair Saints</small></span></div><div><strong>4th</strong><span>College VALORANT Championship 2025<small>Cumberland Phoenix</small></span></div><div><strong>3rd–4th</strong><span>CECC Finals 2025<small>Cumberland Phoenix</small></span></div><div><strong>7th–8th</strong><span>Esports World Cup 2025 · Americas Qualifier<small>2Game Esports</small></span></div><div><strong>3rd</strong><span>Liga Gamers Club Série A · 2023 Finals<small>Cardume</small></span></div></div><a class="profile-link" href="https://www.vlr.gg/player/5300/jayp" rel="noopener noreferrer">Full results & team history on VLR.gg <span aria-hidden="true">↗</span></a>',
+      '<div class="results"><div><strong>5th–6th</strong><span>College VALORANT Championship 2026<small>St. Clair Saints</small></span></div><div><strong>4th</strong><span>College VALORANT Championship 2025<small>Cumberland Phoenix</small></span></div><div><strong>3rd–4th</strong><span>CECC Finals 2025<small>Cumberland Phoenix</small></span></div><div><strong>7th–8th</strong><span>Esports World Cup 2025 · Americas Qualifier<small>2Game Esports</small></span></div><div><strong>3rd</strong><span>Liga Gamers Club Série A · 2023 Finals<small>Cardume</small></span></div></div><a class="profile-link" href="https://www.vlr.gg/player/5300/jayp" target="_blank" rel="noopener noreferrer">Full results & team history on VLR.gg <span aria-hidden="true">↗</span></a>',
   },
 };
 const devices = {
@@ -163,66 +163,70 @@ const wires = document.querySelector(".wires");
 const switchDevice = document.querySelector(".switch");
 const networkNodes = [...document.querySelectorAll(".node[data-node]")];
 const ns = "http://www.w3.org/2000/svg";
+// Clip a straight cable to each device's visible icon, rather than its label.
+function deviceBox(element, bounds) {
+  const box = element.getBoundingClientRect();
+  return {
+    x: box.left + box.width / 2 - bounds.left,
+    y: box.top + box.height / 2 - bounds.top,
+    halfWidth: box.width / 2,
+    halfHeight: box.height / 2,
+  };
+}
+function edgePoint(box, toward) {
+  const dx = toward.x - box.x,
+    dy = toward.y - box.y;
+  const scale =
+    1 / Math.max(Math.abs(dx) / box.halfWidth, Math.abs(dy) / box.halfHeight);
+  return { x: box.x + dx * scale, y: box.y + dy * scale };
+}
 function drawNetwork() {
   const bounds = canvas.getBoundingClientRect();
-  const sw = switchDevice.getBoundingClientRect();
-  const cx = sw.left + sw.width / 2 - bounds.left,
-    cy = sw.top + sw.height / 2 - bounds.top;
   wires.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
   wires.replaceChildren();
-  networkNodes.forEach((node, index) => {
-    const box = node.getBoundingClientRect(),
-      key = node.dataset.node;
-    const x = box.left + box.width / 2 - bounds.left;
-    const above = box.top + box.height / 2 < sw.top + sw.height / 2;
-    const y = (above ? box.bottom : box.top) - bounds.top;
-    let sx = cx,
-      sy = cy,
-      route;
-    if (key === "contact") {
-      const router = document.querySelector(".profile").getBoundingClientRect();
-      sy = router.top - bounds.top;
-      route = "M " + sx + " " + sy + " V " + y;
-    } else if (key === "about" || key === "tutoring") {
-      sy = (above ? sw.top : sw.bottom) - bounds.top;
-      route = `M ${sx} ${sy} V ${y}`;
-    } else {
-      const left = x < cx;
-      sx = (left ? sw.left : sw.right) - bounds.left;
-      sy = cy + (above ? -6 : 6);
-      route = `M ${sx} ${sy} H ${x} V ${y}`;
-    }
+  for (const node of networkNodes) {
+    const key = node.dataset.node;
+    const source =
+      key === "contact"
+        ? document.querySelector(".profile .device-shell")
+        : switchDevice;
+    const a = deviceBox(source, bounds);
+    const b = deviceBox(node.querySelector(".device-shell"), bounds);
+    const start = edgePoint(a, b),
+      end = edgePoint(b, a);
+    const dx = end.x - start.x,
+      dy = end.y - start.y;
+    const length = Math.hypot(dx, dy) || 1;
     const group = document.createElementNS(ns, "g");
     group.dataset.link = key;
     const line = document.createElementNS(ns, "path");
-    line.setAttribute("d", route);
+    line.setAttribute("d", `M ${start.x} ${start.y} L ${end.x} ${end.y}`);
     group.append(line);
-    const port = document.createElementNS(ns, "circle");
-    port.setAttribute("cx", sx);
-    port.setAttribute("cy", sy);
-    port.setAttribute("r", "2");
-    port.setAttribute("class", "port");
-    group.append(port);
-    const end = document.createElementNS(ns, "path");
-    end.setAttribute(
-      "d",
-      above
-        ? `M ${x - 3} ${y + 8} L ${x + 3} ${y + 8} L ${x} ${y + 3} Z`
-        : `M ${x - 3} ${y - 8} L ${x + 3} ${y - 8} L ${x} ${y - 3} Z`,
-    );
-    end.setAttribute("class", "link-light");
-    group.append(end);
+    for (const [point, direction] of [
+      [start, 1],
+      [end, -1],
+    ]) {
+      const indicator = document.createElementNS(ns, "circle");
+      indicator.setAttribute("cx", point.x + ((direction * dx) / length) * 7);
+      indicator.setAttribute("cy", point.y + ((direction * dy) / length) * 7);
+      indicator.setAttribute("r", "2");
+      indicator.setAttribute("class", "link-light");
+      group.append(indicator);
+    }
     const title = document.createElementNS(ns, "title");
-    title.textContent = `${devices[key][2]} — ${node.textContent.trim()}`;
+    title.textContent = `${linkPorts[key]} — ${node.textContent.trim()}`;
     group.append(title);
     const label = document.createElementNS(ns, "text");
     label.setAttribute("class", "port-label");
-    label.setAttribute("x", x);
-    label.setAttribute("y", (sy + y) / 2);
+    label.setAttribute(
+      "x",
+      (start.x + end.x) / 2 - (dy / length) * (Math.abs(dx) < 1 ? 44 : 13),
+    );
+    label.setAttribute("y", (start.y + end.y) / 2 + (dx / length) * 13);
     label.textContent = linkPorts[key];
     group.append(label);
     wires.append(group);
-  });
+  }
 }
 function highlightLink(key, active) {
   const group = wires.querySelector(`[data-link="${key}"]`);

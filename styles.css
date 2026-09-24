@@ -838,3 +838,8 @@ dialog {
   color: var(--muted);
   font-size: 12px;
 }
+.node > span:not(.device-shell),
+.node .device-code {
+  background: var(--bg);
+  padding-inline: 4px;
+}

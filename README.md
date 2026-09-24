@@ -60,3 +60,7 @@ Published using GitHub Pages from `main` at the repository root. `CNAME` preserv
 ## Content sources
 
 Professional details are maintained from my résumé and [LinkedIn](https://www.linkedin.com/in/joao-pereira-6960822a4/). Competitive results link to [VLR.gg](https://www.vlr.gg/player/5300/jayp). Running results and TutorTrack details are personal records.
+
+## Change history
+
+See [CHANGELOG.md](CHANGELOG.md) for documented updates. Contact links and the résumé open in a separate tab or window (depending on browser settings).
