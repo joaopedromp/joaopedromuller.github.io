@@ -22,15 +22,15 @@ Open http://localhost:4173. You can also open `index.html` directly.
 
 ## Project structure
 
-| File | Purpose |
-| --- | --- |
-| `index.html` | Semantic page structure and network devices |
-| `styles.css` | Themes, responsive layout, and device windows |
-| `app.js` | Portfolio content, dialogs, and connection rendering |
-| `theme.js` | Restores the saved color preference before rendering |
-| `joao-pereira-resume.pdf` | Public résumé |
-| `CNAME` | GitHub Pages custom domain |
-| `scripts/security.test.mjs` | Static security and integrity checks |
+| File                        | Purpose                                              |
+| --------------------------- | ---------------------------------------------------- |
+| `index.html`                | Semantic page structure and network devices          |
+| `styles.css`                | Themes, responsive layout, and device windows        |
+| `app.js`                    | Portfolio content, dialogs, and connection rendering |
+| `theme.js`                  | Restores the saved color preference before rendering |
+| `joao-pereira-resume.pdf`   | Public résumé                                        |
+| `CNAME`                     | GitHub Pages custom domain                           |
+| `scripts/security.test.mjs` | Static security and integrity checks                 |
 
 ## Updating content
 
