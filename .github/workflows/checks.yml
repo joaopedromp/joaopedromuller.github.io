@@ -1,0 +1,11 @@
+name: Site checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Check static security and site integrity
+        run: node --test scripts/security.test.mjs
