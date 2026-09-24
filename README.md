@@ -1,4 +1,4 @@
-# João Pereira · Portfolio
+# Joao Pereira · Portfolio
 
 A personal portfolio presented as an interactive network topology.
 
