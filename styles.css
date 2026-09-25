@@ -164,10 +164,6 @@ header > * {
   left: 80%;
   top: 74.3%;
 }
-.tutoring {
-  left: 50%;
-  top: 80%;
-}
 .switch {
   position: absolute;
   left: 50%;
@@ -294,9 +290,6 @@ dialog .note {
   }
   .profile {
     top: 24%;
-  }
-  .tutoring {
-    top: 80%;
   }
   footer {
     bottom: 17px;
@@ -645,9 +638,6 @@ dialog {
   .identity .full-name {
     font-size: 19px;
   }
-  .port-label {
-    font-size: 10px;
-  }
 }
 .entry {
   margin-top: 22px;
@@ -842,4 +832,19 @@ dialog {
 .node .device-code {
   background: var(--bg);
   padding-inline: 4px;
+}
+
+/* Dialog headings receive initial focus without looking like a control. */
+#detail-title:focus {
+  outline: none;
+}
+@media (max-width: 600px) {
+  .port-label {
+    font-size: 9px;
+    stroke-width: 3px;
+  }
+}
+
+.project-note {
+  margin-top: 20px;
 }

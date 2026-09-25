@@ -52,7 +52,7 @@ test("JavaScript syntax and no dynamic executable-code APIs", () => {
 });
 test("Domain and public title remain correct", () => {
   assert.equal(read("CNAME").trim(), "joaopedromuller.me");
-  assert.ok(html.includes("<title>João Pereira</title>"));
+  assert.ok(html.includes("<title>Joao Pereira Portfolio</title>"));
   assert.ok(html.includes("Joao Pereira."));
 });
 test("Unique LAN access ports and separate WAN/uplink", () => {
@@ -60,8 +60,8 @@ test("Unique LAN access ports and separate WAN/uplink", () => {
   const access = [...mapping.matchAll(/:\s*["'](Fa0\/\d+)["']/g)].map(
     (m) => m[1],
   );
-  assert.equal(access.length, 5);
-  assert.equal(new Set(access).size, 5);
+  assert.equal(access.length, 4);
+  assert.equal(new Set(access).size, 4);
   assert.match(mapping, /contact:\s*["']Gi0\/0 · WAN["']/);
   assert.match(mapping, /about:\s*["']Gi0\/1["']/);
   assert.match(read("styles.css"), /\.wires\s*\{\s*pointer-events:\s*none;/);

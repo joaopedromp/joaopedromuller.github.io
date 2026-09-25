@@ -10,22 +10,16 @@ const sections = {
       '<article class="entry"><h2>Cybersecurity Intern</h2><p class="entry-meta">ISH Tecnologia · Vila Velha, Brazil<br>Jan–Jul 2024</p><ul><li>Supported SOC operations and SIEM/SOAR setup and maintenance.</li><li>Troubleshot Linux, Windows, and security-platform issues.</li><li>Created security-log parsers with RegEx and RSA Log Parser.</li></ul><div class="chips"><span>NetWitness</span><span>Securonix</span><span>Harpia</span></div></article><article class="entry"><h2>Peer Tutor</h2><p class="entry-meta">St. Clair College · Windsor, Canada<br>Sep 2026–present · Part-time</p><p>Help students understand technical concepts and work through problems in Linux, Java, JavaScript, Mathematics, Web Design, and Networking.</p></article><article class="entry"><h2>Mathematics Tutor</h2><p class="entry-meta">Cumberland University · Lebanon, TN<br>Aug 2024–May 2025</p><p>Tutored 50+ undergraduate students in College Algebra through individual and group sessions, covering assignments, test preparation, and problem solving.</p></article>',
   },
   project: {
-    title: "TutorTrack",
-    text: "I built a local-first tutoring management app to keep the administrative side of tutoring in one place.",
+    title: "Personal Projects",
+    text: "",
     extra:
-      '<div class="feature-list"><div><h2>Students & sessions</h2><p>Manage student records and tutoring sessions.</p></div><div><h2>Hours & payroll</h2><p>Track work hours and organize payroll periods.</p></div><div><h2>Calendar sync</h2><p>Synchronize with Google Calendar.</p></div></div><details class="more"><summary>How it is built</summary><p>A PWA with an Electron desktop app. IndexedDB stores the data locally, without a backend or external database.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Electron</span><span>IndexedDB</span></div></details>',
+      '<article class="project-note"><h2>TutorTrack</h2><p>I built TutorTrack for my own tutoring work: keeping students, sessions, hours, and payroll organized, with Google Calendar sync.</p><p>It gave me a practical way to use React and TypeScript in a complete application. It runs as a PWA and an Electron desktop app, with data stored locally in IndexedDB rather than a backend database.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Electron</span><span>IndexedDB</span></div></article>',
   },
   running: {
-    title: "Off the clock",
+    title: "Running",
     text: "Recreational runner. Half-marathon finisher. I also enjoy getting outside for a walk.",
     extra:
-      '<div class="race-result"><strong>1:53:54</strong><span>Half marathon · 21.1 km</span></div>',
-  },
-  tutoring: {
-    title: "Peer tutoring",
-    text: "I help students understand technical concepts and develop practical problem-solving skills. At St. Clair College, I tutor the subjects below. Previously, I tutored 50+ Cumberland students in College Algebra through individual and group sessions (Aug 2024–May 2025).",
-    extra:
-      '<div class="chips subjects"><span>Linux</span><span>Java</span><span>JavaScript</span><span>Mathematics</span><span>Web Design</span><span>Networking</span></div>',
+      '<div class="race-result"><strong>1:53:54</strong><span>Half marathon · 21.1 km</span></div><div class="race-result"><strong>51:42</strong><span>10 km</span></div>',
   },
   skills: {
     title: "Skills & education",
@@ -35,13 +29,13 @@ const sections = {
   },
   contact: {
     title: "Connect",
-    text: "Professional experience, projects, and contact.",
+    text: "",
     extra:
       '<a class="profile-link" href="https://www.linkedin.com/in/joao-pereira-6960822a4/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="profile-link" href="https://github.com/joaopedromp" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="profile-link" href="joao-pereira-resume.pdf" target="_blank" rel="noopener noreferrer">Résumé <span>PDF ↗</span></a>',
   },
   esports: {
     title: "Competitive Valorant",
-    text: "I compete as jayp. My team history spans Brazil and North America, including SG e-Sports, Cardume, Cumberland Phoenix, 2Game Esports, and St. Clair Saints.",
+    text: "I played Valorant professionally as jayp, competing in Brazil and North America, including the Esports World Cup 2025 Americas Qualifier with 2Game Esports. I now compete on the St. Clair College varsity team.",
     extra:
       '<div class="results"><div><strong>5th–6th</strong><span>College VALORANT Championship 2026<small>St. Clair Saints</small></span></div><div><strong>4th</strong><span>College VALORANT Championship 2025<small>Cumberland Phoenix</small></span></div><div><strong>3rd–4th</strong><span>CECC Finals 2025<small>Cumberland Phoenix</small></span></div><div><strong>7th–8th</strong><span>Esports World Cup 2025 · Americas Qualifier<small>2Game Esports</small></span></div><div><strong>3rd</strong><span>Liga Gamers Club Série A · 2023 Finals<small>Cardume</small></span></div></div><a class="profile-link" href="https://www.vlr.gg/player/5300/jayp" target="_blank" rel="noopener noreferrer">Full results & team history on VLR.gg <span aria-hidden="true">↗</span></a>',
   },
@@ -53,8 +47,7 @@ const devices = {
   project: ["PROJ-SRV", "Server", "Fa0"],
   running: ["AP-RUNNER", "Access point", "Eth0"],
   esports: ["GAME-PC", "Workstation", "Fa0"],
-  tutoring: ["STUDY-PC", "Workstation", "Fa0"],
-  skills: ["ACCESS-SW", "Switch", "Gi0/1 · Fa0/1–5"],
+  skills: ["ACCESS-SW", "Switch", "Gi0/1 · Fa0/1–4"],
 };
 const linkPorts = {
   contact: "Gi0/0 · WAN",
@@ -63,7 +56,6 @@ const linkPorts = {
   project: "Fa0/2",
   running: "Fa0/3",
   esports: "Fa0/4",
-  tutoring: "Fa0/5",
 };
 const facts = {
   about: [
@@ -74,11 +66,7 @@ const facts = {
   ],
   running: [
     ["Running for", "About 28–29 weeks"],
-    ["Average race pace", "5:24 / km"],
-  ],
-  tutoring: [
-    ["College", "St. Clair College"],
-    ["Since", "September 2026"],
+    ["Half-marathon pace", "5:24 / km"],
   ],
   skills: [
     ["Security operations", "SIEM / SOAR<br>NetWitness · Securonix · Harpia"],
@@ -91,8 +79,7 @@ const facts = {
 
 // Network symbols match the roles shown in the device windows.
 const pcIcon = document.querySelector(".experience svg").outerHTML;
-for (const key of ["esports", "tutoring"])
-  document.querySelector(`[data-node="${key}"] svg`).outerHTML = pcIcon;
+document.querySelector('[data-node="esports"] svg').outerHTML = pcIcon;
 document.querySelector(".running svg").innerHTML =
   '<path d="M12 22a42 42 0 0 1 56 0M22 32a27 27 0 0 1 36 0M32 42a12 12 0 0 1 16 0"/><circle cx="40" cy="50" r="2"/>';
 document.querySelector(".project svg").innerHTML =
@@ -116,9 +103,10 @@ document.querySelectorAll("[data-node]").forEach((button) =>
       s = sections[key],
       d = devices[key];
     document.querySelector("#detail-content").innerHTML =
-      `<div class="device-bar"><span class="bar-led" aria-hidden="true"></span><strong>${d[0]}</strong><span class="port-name">${d[2]}</span></div><div class="window-body"><div class="window-heading"><h1 id="detail-title">${s.title}</h1><span>${d[1]}</span></div><p>${s.text}</p>${s.extra || ""}${facts[key] ? `<dl class="fact-grid">${facts[key].map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join("")}</dl>` : ""}${s.note ? `<p class="note">${s.note}</p>` : ""}</div>`;
+      `<div class="device-bar"><span class="bar-led" aria-hidden="true"></span><strong>${d[0]}</strong><span class="port-name">${d[2]}</span></div><div class="window-body"><div class="window-heading"><h1 id="detail-title" tabindex="-1">${s.title}</h1><span>${d[1]}</span></div>${s.text ? `<p>${s.text}</p>` : ""}${s.extra || ""}${facts[key] ? `<dl class="fact-grid">${facts[key].map(([label, value]) => `<div><dt>${label}</dt><dd>${value}</dd></div>`).join("")}</dl>` : ""}${s.note ? `<p class="note">${s.note}</p>` : ""}</div>`;
     dialog.setAttribute("aria-labelledby", "detail-title");
     dialog.showModal();
+    document.querySelector("#detail-title").focus({ preventScroll: true });
   }),
 );
 document
@@ -184,6 +172,7 @@ function drawNetwork() {
   const bounds = canvas.getBoundingClientRect();
   wires.setAttribute("viewBox", `0 0 ${bounds.width} ${bounds.height}`);
   wires.replaceChildren();
+  const compact = window.matchMedia("(max-width: 600px)").matches;
   for (const node of networkNodes) {
     const key = node.dataset.node;
     const source =
@@ -218,11 +207,19 @@ function drawNetwork() {
     group.append(title);
     const label = document.createElementNS(ns, "text");
     label.setAttribute("class", "port-label");
+    // Keep the short router uplink label below the router caption on phones.
+    const labelPosition = compact && key === "about" ? 0.25 : 0.5;
     label.setAttribute(
       "x",
-      (start.x + end.x) / 2 - (dy / length) * (Math.abs(dx) < 1 ? 44 : 13),
+      start.x +
+        dx * labelPosition -
+        (dy / length) *
+          (Math.abs(dx) < 1 ? (compact ? 32 : 44) : compact ? 10 : 13),
     );
-    label.setAttribute("y", (start.y + end.y) / 2 + (dx / length) * 13);
+    label.setAttribute(
+      "y",
+      start.y + dy * labelPosition + (dx / length) * (compact ? 10 : 13),
+    );
     label.textContent = linkPorts[key];
     group.append(label);
     wires.append(group);
@@ -245,6 +242,6 @@ networkNodes.forEach((node) => {
 new ResizeObserver(drawNetwork).observe(canvas);
 window.addEventListener("resize", drawNetwork);
 drawNetwork();
-document.title = "João Pereira";
+document.title = "Joao Pereira Portfolio";
 document.querySelector('meta[name="description"]').content =
   "Joao Pereira — cybersecurity and networking student, tutor, recreational runner, and professional esports player.";
