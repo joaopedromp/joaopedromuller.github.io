@@ -13,7 +13,7 @@ const sections = {
     title: "Personal Projects",
     text: "",
     extra:
-      '<article class="project-note"><h2>TutorTrack</h2><p>I built TutorTrack for my own tutoring work: keeping students, sessions, hours, and payroll organized, with Google Calendar sync.</p><p>It gave me a practical way to use React and TypeScript in a complete application. It runs as a PWA and an Electron desktop app, with data stored locally in IndexedDB rather than a backend database.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Electron</span><span>IndexedDB</span></div></article>',
+      '<article class="project-note"><h2>TutorTrack · <a href="https://github.com/joaopedromp/TutorTrack" target="_blank" rel="noopener noreferrer" aria-label="TutorTrack repository on GitHub">GitHub <span aria-hidden="true">↗</span></a></h2><p>I built TutorTrack for my own tutoring work: keeping students, sessions, hours, and payroll organized, with Google Calendar sync.</p><p>It gave me a practical way to use React and TypeScript in a complete application. It runs as a PWA and an Electron desktop app, with data stored locally in IndexedDB rather than a backend database.</p><div class="chips"><span>React</span><span>TypeScript</span><span>Vite</span><span>Tailwind CSS</span><span>Electron</span><span>IndexedDB</span></div></article>',
   },
   running: {
     title: "Running",
@@ -31,7 +31,7 @@ const sections = {
     title: "Connect",
     text: "",
     extra:
-      '<a class="profile-link" href="https://www.linkedin.com/in/joao-pereira-6960822a4/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="profile-link" href="https://github.com/joaopedromp" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="profile-link" href="joao-pereira-resume.pdf" target="_blank" rel="noopener noreferrer">Résumé <span>PDF ↗</span></a>',
+      '<a class="profile-link" href="https://www.linkedin.com/in/joao-pereira-6960822a4/" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a><a class="profile-link" href="https://github.com/joaopedromp" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a><a class="profile-link" href="joao-pereira-resume.pdf" target="_blank" rel="noopener noreferrer">Resume <span>PDF ↗</span></a>',
   },
   esports: {
     title: "Competitive Valorant",
